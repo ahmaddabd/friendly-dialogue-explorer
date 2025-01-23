@@ -1,4 +1,4 @@
-import { Navigation } from "@/components/Navigation";
+import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/sections/Footer";
 import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { useEffect } from "react";

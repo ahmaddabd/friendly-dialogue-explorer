@@ -1,20 +1,36 @@
-import { lazy } from 'react';
+export const debounce = <T extends (...args: any[]) => any>(
+  func: T,
+  wait: number
+): ((...args: Parameters<T>) => void) => {
+  let timeout: NodeJS.Timeout;
 
-export const lazyWithPreload = <T extends Promise<any>>(
-  factory: () => T
-): { preload: () => T; Component: React.LazyExoticComponent<any> } => {
-  const Component = lazy(() => factory());
-  return {
-    preload: () => factory(),
-    Component,
+  return (...args: Parameters<T>) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
   };
 };
 
-export const preloadRoutes = () => {
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(() => {
-      import('../../pages/Login');
-      import('../../pages/Register');
-    });
-  }
+export const throttle = <T extends (...args: any[]) => any>(
+  func: T,
+  limit: number
+): ((...args: Parameters<T>) => void) => {
+  let inThrottle: boolean;
+
+  return (...args: Parameters<T>) => {
+    if (!inThrottle) {
+      func(...args);
+      inThrottle = true;
+      setTimeout(() => (inThrottle = false), limit);
+    }
+  };
+};
+
+export const measurePerformance = async <T>(
+  fn: () => Promise<T>,
+  label: string
+): Promise<T> => {
+  console.time(label);
+  const result = await fn();
+  console.timeEnd(label);
+  return result;
 };
