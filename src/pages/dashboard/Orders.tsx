@@ -31,6 +31,22 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, Printer, Eye } from "lucide-react";
 import { sendOrderNotification } from "@/utils/orderNotifications";
 
+// Add the getStatusColor function
+const getStatusColor = (status: string) => {
+  switch (status) {
+    case "pending":
+      return "text-yellow-600 bg-yellow-100";
+    case "processing":
+      return "text-blue-600 bg-blue-100";
+    case "completed":
+      return "text-green-600 bg-green-100";
+    case "cancelled":
+      return "text-red-600 bg-red-100";
+    default:
+      return "text-gray-600 bg-gray-100";
+  }
+};
+
 const Orders = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
