@@ -24,6 +24,7 @@ interface EmailRegistrationFormProps {
 
 export const EmailRegistrationForm = ({ onSubmit, step, loading }: EmailRegistrationFormProps) => {
   const { lang } = useLanguage();
+  console.log("EmailRegistrationForm rendered with step:", step);
   
   const form = useForm<EmailFormData>({
     resolver: zodResolver(emailFormSchema),
@@ -35,14 +36,29 @@ export const EmailRegistrationForm = ({ onSubmit, step, loading }: EmailRegistra
     },
   });
 
-  const handleSubmit = (data: EmailFormData) => {
-    console.log("EmailRegistrationForm - Form submitted with data:", data);
-    onSubmit(data);
+  console.log("Form errors:", form.formState.errors);
+
+  const handleSubmit = async (data: EmailFormData) => {
+    console.log("Form submitted in EmailRegistrationForm");
+    console.log("Form data:", data);
+    console.log("Form is valid:", form.formState.isValid);
+    
+    try {
+      await onSubmit(data);
+    } catch (error) {
+      console.error("Error in form submission:", error);
+    }
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+      <form 
+        onSubmit={(e) => {
+          console.log("Form submit event triggered");
+          form.handleSubmit(handleSubmit)(e);
+        }} 
+        className="space-y-4"
+      >
         {step === 1 && (
           <>
             <FormField
@@ -58,6 +74,10 @@ export const EmailRegistrationForm = ({ onSubmit, step, loading }: EmailRegistra
                         placeholder={lang === 'ar' ? "أدخل بريدك الإلكتروني" : "Enter your email"}
                         className="pl-10"
                         {...field}
+                        onChange={(e) => {
+                          console.log("Email input changed:", e.target.value);
+                          field.onChange(e);
+                        }}
                       />
                     </FormControl>
                   </div>
@@ -80,6 +100,10 @@ export const EmailRegistrationForm = ({ onSubmit, step, loading }: EmailRegistra
                         placeholder={lang === 'ar' ? "أدخل كلمة المرور" : "Enter your password"}
                         className="pl-10"
                         {...field}
+                        onChange={(e) => {
+                          console.log("Password input changed:", e.target.value);
+                          field.onChange(e);
+                        }}
                       />
                     </FormControl>
                   </div>
@@ -92,6 +116,7 @@ export const EmailRegistrationForm = ({ onSubmit, step, loading }: EmailRegistra
               type="submit"
               className="w-full bg-green-600 hover:bg-green-700"
               disabled={loading}
+              onClick={() => console.log("Next button clicked")}
             >
               {loading 
                 ? (lang === 'ar' ? "جاري المعالجة..." : "Processing...")
@@ -116,6 +141,10 @@ export const EmailRegistrationForm = ({ onSubmit, step, loading }: EmailRegistra
                         placeholder={lang === 'ar' ? "أدخل اسم المتجر" : "Enter store name"}
                         className="pl-10"
                         {...field}
+                        onChange={(e) => {
+                          console.log("Store name input changed:", e.target.value);
+                          field.onChange(e);
+                        }}
                       />
                     </FormControl>
                   </div>
@@ -137,6 +166,10 @@ export const EmailRegistrationForm = ({ onSubmit, step, loading }: EmailRegistra
                         placeholder={lang === 'ar' ? "أدخل اسم المالك" : "Enter owner name"}
                         className="pl-10"
                         {...field}
+                        onChange={(e) => {
+                          console.log("Owner name input changed:", e.target.value);
+                          field.onChange(e);
+                        }}
                       />
                     </FormControl>
                   </div>
@@ -149,6 +182,7 @@ export const EmailRegistrationForm = ({ onSubmit, step, loading }: EmailRegistra
               type="submit"
               className="w-full bg-green-600 hover:bg-green-700"
               disabled={loading}
+              onClick={() => console.log("Create Account button clicked")}
             >
               {loading 
                 ? (lang === 'ar' ? "جاري المعالجة..." : "Processing...")
