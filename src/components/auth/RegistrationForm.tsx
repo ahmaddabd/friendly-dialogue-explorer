@@ -26,15 +26,8 @@ export const RegistrationForm = ({
   const Arrow = lang === 'ar' ? ArrowLeft : ArrowRight;
   const [activeTab, setActiveTab] = useState<"email" | "phone">("email");
 
-  const handleFormSubmit = () => {
-    const form = document.querySelector('form');
-    if (form) {
-      form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
-    }
-  };
-
   return (
-    <Card className="w-full max-w-md shadow-xl border border-green-100/20 backdrop-blur-sm bg-white/80 animate-fade-in">
+    <Card className="w-full max-w-md shadow-xl border border-green-100/20">
       <CardHeader className="space-y-2 text-center pb-6">
         <Link 
           to="/" 
@@ -59,7 +52,7 @@ export const RegistrationForm = ({
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="p-6 border-t border-b border-gray-100">
+      <CardContent className="p-6">
         <Tabs 
           value={activeTab} 
           onValueChange={(value) => setActiveTab(value as "email" | "phone")} 
@@ -68,44 +61,36 @@ export const RegistrationForm = ({
           <TabsList className="grid w-full grid-cols-2 mb-6">
             <TabsTrigger 
               value="email"
-              className="data-[state=active]:bg-green-600 data-[state=active]:text-white transition-all duration-200"
+              className="data-[state=active]:bg-green-600 data-[state=active]:text-white"
             >
               {lang === 'ar' ? "البريد الإلكتروني" : "Email"}
             </TabsTrigger>
             <TabsTrigger 
               value="phone"
-              className="data-[state=active]:bg-green-600 data-[state=active]:text-white transition-all duration-200"
+              className="data-[state=active]:bg-green-600 data-[state=active]:text-white"
             >
               {lang === 'ar' ? "رقم الهاتف" : "Phone"}
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="email">
-            <EmailRegistrationForm onSubmit={onSubmit} step={step} />
+            <EmailRegistrationForm 
+              onSubmit={onSubmit} 
+              step={step} 
+              loading={loading}
+            />
           </TabsContent>
 
           <TabsContent value="phone">
-            <PhoneRegistrationForm onSubmit={onSubmit} step={step} />
+            <PhoneRegistrationForm 
+              onSubmit={onSubmit} 
+              step={step}
+            />
           </TabsContent>
         </Tabs>
       </CardContent>
 
-      <CardFooter className="flex flex-col space-y-4 p-6 bg-gray-50/50 rounded-b-lg">
-        <Button
-          onClick={handleFormSubmit}
-          className="w-full bg-green-600 hover:bg-green-700 transition-all duration-300 text-white font-medium shadow-lg hover:shadow-xl"
-          disabled={loading}
-        >
-          {loading 
-            ? (lang === 'ar' ? "جاري المعالجة..." : "Processing...")
-            : (step === 1 
-                ? (lang === 'ar' ? "التالي" : "Next")
-                : (lang === 'ar' ? "إنشاء الحساب" : "Create Account")
-              )
-          }
-          <Arrow className="rtl:mr-2 ltr:ml-2 h-5 w-5" />
-        </Button>
-
+      <CardFooter className="flex flex-col space-y-4 p-6 bg-gray-50/50">
         {step === 2 && (
           <Button
             type="button"

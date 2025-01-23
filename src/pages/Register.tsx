@@ -8,22 +8,31 @@ const Register = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState<1 | 2>(1);
   const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState<any>(null);
 
   const handleSubmit = async (values: any) => {
     if (step === 1) {
+      // Store form data and move to next step
+      setFormData(values);
       setStep(2);
       return;
     }
+
+    // Combine data from both steps
+    const finalData = {
+      ...formData,
+      ...values
+    };
 
     setLoading(true);
     try {
       // Register the user
       const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-        email: values.email,
-        password: values.password,
+        email: finalData.email,
+        password: finalData.password,
         options: {
           data: {
-            full_name: values.ownerName,
+            full_name: finalData.ownerName,
           }
         }
       });
@@ -45,11 +54,11 @@ const Register = () => {
         return;
       }
 
-      // Create the store with enhanced settings
+      // Create the store
       const { error: storeError } = await supabase
         .from('stores')
         .insert({
-          name: values.storeName,
+          name: finalData.storeName,
           owner_id: signUpData.user?.id,
           category: 'general',
           status: 'pending',
@@ -89,6 +98,7 @@ const Register = () => {
         description: "سيتم توجيهك إلى لوحة التحكم",
       });
 
+      // Redirect to dashboard
       navigate('/dashboard');
     } catch (error: any) {
       toast({
@@ -101,20 +111,17 @@ const Register = () => {
     }
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-green-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Decorative Elements */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 -left-4 w-72 h-72 bg-green-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob" />
-        <div className="absolute top-0 -right-4 w-72 h-72 bg-green-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000" />
-        <div className="absolute -bottom-8 left-20 w-72 h-72 bg-green-100 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000" />
-      </div>
+  const handleBack = () => {
+    setStep(1);
+  };
 
+  return (
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <RegistrationForm 
         onSubmit={handleSubmit}
         loading={loading}
         step={step}
-        onStepChange={setStep}
+        onStepChange={handleBack}
       />
     </div>
   );
