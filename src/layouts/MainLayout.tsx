@@ -9,10 +9,10 @@ interface MainLayoutProps {
 
 export const MainLayout = ({ children, showAnnouncement = true }: MainLayoutProps) => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-green-50 via-white to-green-50">
       {showAnnouncement && <AnnouncementBar />}
       <Navigation />
-      <main className="flex-grow">
+      <main className="flex-grow animate-fade-in">
         {children}
       </main>
       <Footer />
