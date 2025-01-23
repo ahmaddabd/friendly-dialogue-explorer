@@ -2,9 +2,12 @@ import { Navigation } from "@/components/Navigation";
 import { FeatureCard } from "@/components/FeatureCard";
 import { content } from "@/config/content";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Users, Building2, Phone, Mail, Globe2, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Users, Building2, Phone, Mail, Globe2, CheckCircle2, ArrowLeft } from "lucide-react";
 
 const Index = () => {
+  const isRTL = document.documentElement.dir === 'rtl';
+  const Arrow = isRTL ? ArrowLeft : ArrowRight;
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50/50">
       <Navigation />
@@ -30,11 +33,13 @@ const Index = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
-              <Button size="lg" className="bg-green-600 hover:bg-green-700">
+              <Button size="lg" className="bg-green-600 hover:bg-green-700 text-lg">
                 ابدأ الآن مجاناً
-                <ArrowRight className="mr-2 h-5 w-5" />
+                <Arrow className="mr-2 h-5 w-5" />
               </Button>
-              <Button size="lg" variant="outline">تواصل مع المبيعات</Button>
+              <Button size="lg" variant="outline" className="text-lg">
+                تواصل مع المبيعات
+              </Button>
             </div>
           </div>
         </div>
@@ -83,13 +88,31 @@ const Index = () => {
         </div>
       </div>
 
+      {/* Partners Section */}
+      <div className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">شركاء النجاح</h2>
+            <p className="text-xl text-gray-600">نفخر بثقة آلاف المتاجر في خدماتنا</p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+            {[1, 2, 3, 4].map((partner) => (
+              <div key={partner} className="flex items-center justify-center p-8 bg-gray-50 rounded-lg">
+                <div className="w-24 h-24 bg-gray-200 rounded-full"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* CTA Section */}
       <div className="py-20 bg-green-600 text-white">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto">
             <h2 className="text-3xl font-bold mb-6">ابدأ رحلتك في التجارة الإلكترونية اليوم</h2>
             <p className="text-xl mb-8 text-green-50">انضم إلى آلاف التجار الناجحين واستفد من خدماتنا المتكاملة</p>
-            <Button size="lg" variant="secondary" className="bg-white text-green-600 hover:bg-green-50">
+            <Button size="lg" variant="secondary" className="bg-white text-green-600 hover:bg-green-50 text-lg">
               سجل الآن مجاناً
             </Button>
           </div>
@@ -118,15 +141,15 @@ const Index = () => {
               <ul className="space-y-4 text-gray-400">
                 <li className="flex items-center gap-2">
                   <Phone className="h-5 w-5" />
-                  <span>+963 11 123 4567</span>
+                  <span>{content.contact.phone}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Mail className="h-5 w-5" />
-                  <span>info@dikantek.com</span>
+                  <span>{content.contact.email}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Building2 className="h-5 w-5" />
-                  <span>دمشق، سوريا</span>
+                  <span>{content.contact.address}</span>
                 </li>
               </ul>
             </div>
