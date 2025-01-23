@@ -123,3 +123,48 @@
   animation: gradient-x 15s ease infinite;
   background-size: 400% 400%;
 }
+
+/* Interactive Elements */
+.interactive-card {
+  @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+}
+
+.interactive-button {
+  @apply transition-all duration-300 hover:shadow-md hover:-translate-y-0.5;
+}
+
+.interactive-link {
+  @apply relative inline-block after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left;
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus Styles */
+:focus-visible {
+  @apply outline-none ring-2 ring-primary ring-offset-2;
+}
+
+/* Loading States */
+.loading-skeleton {
+  @apply animate-pulse bg-gray-200 rounded;
+}
+
+/* Toast Animations */
+.toast-enter {
+  @apply transform translate-y-2 opacity-0;
+}
+
+.toast-enter-active {
+  @apply transform translate-y-0 opacity-100 transition-all duration-300;
+}
+
+.toast-exit {
+  @apply transform translate-y-0 opacity-100;
+}
+
+.toast-exit-active {
+  @apply transform translate-y-2 opacity-0 transition-all duration-300;
+}
