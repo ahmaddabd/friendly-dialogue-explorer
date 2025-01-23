@@ -27,7 +27,7 @@ const Register = () => {
     setLoading(true);
     try {
       // Register the user
-      const { error: signUpError } = await supabase.auth.signUp({
+      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
         options: {
@@ -37,19 +37,47 @@ const Register = () => {
         }
       });
 
-      if (signUpError) throw signUpError;
+      if (signUpError) {
+        if (signUpError.message.includes("User already registered")) {
+          toast({
+            title: lang === 'ar' ? "خطأ في التسجيل" : "Registration Error",
+            description: lang === 'ar' 
+              ? "البريد الإلكتروني مسجل مسبقاً" 
+              : "Email is already registered",
+            variant: "destructive"
+          });
+        } else {
+          toast({
+            title: lang === 'ar' ? "خطأ" : "Error",
+            description: signUpError.message,
+            variant: "destructive"
+          });
+        }
+        setLoading(false);
+        return;
+      }
 
       // Create the store
       const { error: storeError } = await supabase
         .from('stores')
         .insert({
           name: values.storeName,
-          owner_id: (await supabase.auth.getUser()).data.user?.id,
-          category: 'general', // Adding required category field
+          owner_id: signUpData.user?.id,
+          category: 'general',
           status: 'pending'
         });
 
-      if (storeError) throw storeError;
+      if (storeError) {
+        toast({
+          title: lang === 'ar' ? "خطأ" : "Error",
+          description: lang === 'ar' 
+            ? "حدث خطأ أثناء إنشاء المتجر" 
+            : "Error creating store",
+          variant: "destructive"
+        });
+        setLoading(false);
+        return;
+      }
 
       toast({
         title: lang === 'ar' ? "تم إنشاء الحساب بنجاح" : "Account created successfully",
