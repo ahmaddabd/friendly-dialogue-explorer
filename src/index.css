@@ -76,6 +76,24 @@
   }
 }
 
+@layer components {
+  .sidebar-menu-item {
+    @apply transition-colors duration-200 hover:bg-sidebar-accent/10 rounded-md;
+  }
+
+  .sidebar-group {
+    @apply border-b border-sidebar-border/50 last:border-0 py-2;
+  }
+
+  .sidebar-label {
+    @apply text-xs font-medium text-sidebar-foreground/60 px-3 py-2;
+  }
+
+  .sidebar-content {
+    @apply space-y-1 p-2;
+  }
+}
+
 .glass {
   @apply bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl;
 }
@@ -189,21 +207,4 @@ html {
 
 .toast-exit-active {
   @apply transform translate-y-2 opacity-0 transition-all duration-300;
-}
-
-/* Sidebar Specific Styles */
-.sidebar-menu-item {
-  @apply transition-colors duration-200 hover:bg-sidebar-accent/10 rounded-md;
-}
-
-.sidebar-group {
-  @apply border-b border-sidebar-border/50 last:border-0 py-2;
-}
-
-.sidebar-label {
-  @apply text-xs font-medium text-sidebar-fg/60 px-3 py-2;
-}
-
-.sidebar-content {
-  @apply space-y-1 p-2;
 }
