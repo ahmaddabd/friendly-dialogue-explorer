@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
 import { useLanguage } from "@/components/LanguageSwitcher";
+import { Link } from "react-router-dom";
 
 export const Hero = () => {
   const { lang } = useLanguage();
@@ -35,17 +36,20 @@ export const Hero = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4 animate-fade-in" style={{ animationDelay: "600ms" }}>
-            <Button 
-              size="lg" 
-              className="bg-green-600 hover:bg-green-700 text-lg transform transition-all duration-300 hover:scale-105 hover:shadow-lg"
-            >
-              {lang === 'ar' ? "ابدأ الآن مجاناً" : "Start Now for Free"}
-              <Arrow className="mr-2 h-5 w-5" />
-            </Button>
+            <Link to="/register">
+              <Button 
+                size="lg" 
+                className="bg-green-600 hover:bg-green-700 text-lg transform transition-all duration-300 hover:scale-105 hover:shadow-lg"
+              >
+                {lang === 'ar' ? "ابدأ الآن مجاناً" : "Start Now for Free"}
+                <Arrow className="mr-2 h-5 w-5" />
+              </Button>
+            </Link>
             <Button 
               size="lg" 
               variant="outline" 
               className="text-lg border-2 hover:border-green-600 hover:text-green-600 transition-all duration-300"
+              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
             >
               {lang === 'ar' ? "تواصل مع المبيعات" : "Contact Sales"}
             </Button>

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/components/LanguageSwitcher";
 import { Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const CTA = () => {
   const { lang } = useLanguage();
@@ -22,14 +23,16 @@ export const CTA = () => {
               : "Join thousands of successful merchants and benefit from our integrated services"
             }
           </p>
-          <Button 
-            size="lg" 
-            variant="secondary" 
-            className="bg-white text-green-600 hover:bg-green-50 text-lg group transform transition-all duration-300 hover:scale-105 hover:shadow-lg"
-          >
-            <Sparkles className="w-5 h-5 mr-2 group-hover:animate-pulse" />
-            {lang === 'ar' ? "سجل الآن مجاناً" : "Register Now for Free"}
-          </Button>
+          <Link to="/register">
+            <Button 
+              size="lg" 
+              variant="secondary" 
+              className="bg-white text-green-600 hover:bg-green-50 text-lg group transform transition-all duration-300 hover:scale-105 hover:shadow-lg"
+            >
+              <Sparkles className="w-5 h-5 mr-2 group-hover:animate-pulse" />
+              {lang === 'ar' ? "سجل الآن مجاناً" : "Register Now for Free"}
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

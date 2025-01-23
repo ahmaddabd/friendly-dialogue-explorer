@@ -3,6 +3,7 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useLanguage } from './LanguageSwitcher';
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Sheet,
   SheetContent,
@@ -34,9 +35,9 @@ export const Navigation = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <a href="/" className="text-xl md:text-2xl font-bold text-green-600 hover:text-green-700 transition-colors">
+          <Link to="/" className="text-xl md:text-2xl font-bold text-green-600 hover:text-green-700 transition-colors">
             {lang === 'ar' ? "دكان تك" : "Dukan Tech"}
-          </a>
+          </Link>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
@@ -51,18 +52,22 @@ export const Navigation = () => {
             
             {/* Desktop Buttons */}
             <div className="hidden md:flex items-center gap-3">
-              <Button 
-                variant="ghost" 
-                className="text-base font-medium hover:text-green-600 hover:bg-green-50"
-              >
-                {lang === 'ar' ? "تسجيل دخول" : "Sign In"}
-              </Button>
-              <Button 
-                size="lg"
-                className="bg-green-600 hover:bg-green-700 text-base font-medium px-6 shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                {lang === 'ar' ? "ابدأ الآن" : "Get Started"}
-              </Button>
+              <Link to="/login">
+                <Button 
+                  variant="ghost" 
+                  className="text-base font-medium hover:text-green-600 hover:bg-green-50"
+                >
+                  {lang === 'ar' ? "تسجيل دخول" : "Sign In"}
+                </Button>
+              </Link>
+              <Link to="/register">
+                <Button 
+                  size="lg"
+                  className="bg-green-600 hover:bg-green-700 text-base font-medium px-6 shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  {lang === 'ar' ? "ابدأ الآن" : "Get Started"}
+                </Button>
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
@@ -86,17 +91,21 @@ export const Navigation = () => {
                     </div>
                   </div>
                   <div className="mt-auto p-6 border-t space-y-4">
-                    <Button 
-                      variant="ghost" 
-                      className="w-full justify-center text-base font-medium hover:text-green-600 hover:bg-green-50"
-                    >
-                      {lang === 'ar' ? "تسجيل دخول" : "Sign In"}
-                    </Button>
-                    <Button 
-                      className="w-full justify-center bg-green-600 hover:bg-green-700 text-base font-medium shadow-lg hover:shadow-xl transition-all duration-300"
-                    >
-                      {lang === 'ar' ? "ابدأ الآن" : "Get Started"}
-                    </Button>
+                    <Link to="/login" className="block w-full">
+                      <Button 
+                        variant="ghost" 
+                        className="w-full justify-center text-base font-medium hover:text-green-600 hover:bg-green-50"
+                      >
+                        {lang === 'ar' ? "تسجيل دخول" : "Sign In"}
+                      </Button>
+                    </Link>
+                    <Link to="/register" className="block w-full">
+                      <Button 
+                        className="w-full justify-center bg-green-600 hover:bg-green-700 text-base font-medium shadow-lg hover:shadow-xl transition-all duration-300"
+                      >
+                        {lang === 'ar' ? "ابدأ الآن" : "Get Started"}
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </SheetContent>
