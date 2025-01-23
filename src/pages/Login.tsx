@@ -26,7 +26,24 @@ const Login = () => {
         password
       });
 
-      if (error) throw error;
+      if (error) {
+        if (error.message === "Invalid login credentials") {
+          toast({
+            title: lang === 'ar' ? "خطأ في تسجيل الدخول" : "Login Error",
+            description: lang === 'ar' 
+              ? "البريد الإلكتروني أو كلمة المرور غير صحيحة" 
+              : "Invalid email or password",
+            variant: "destructive"
+          });
+        } else {
+          toast({
+            title: lang === 'ar' ? "خطأ" : "Error",
+            description: error.message,
+            variant: "destructive"
+          });
+        }
+        return;
+      }
 
       toast({
         title: lang === 'ar' ? "تم تسجيل الدخول بنجاح" : "Logged in successfully",
