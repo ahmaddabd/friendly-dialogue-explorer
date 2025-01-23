@@ -17,6 +17,7 @@ const Register = () => {
   const [step, setStep] = useState<1 | 2>(1);
   const [loading, setLoading] = useState(false);
   const Arrow = lang === 'ar' ? ArrowLeft : ArrowRight;
+  const [activeTab, setActiveTab] = useState<"email" | "phone">("email");
 
   const handleSubmit = async (values: any) => {
     if (step === 1) {
@@ -133,7 +134,7 @@ const Register = () => {
         </CardHeader>
 
         <CardContent className="p-6 border-t border-b border-gray-100">
-          <Tabs defaultValue="email" className="w-full">
+          <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "email" | "phone")} className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6">
               <TabsTrigger 
                 value="email"
@@ -161,8 +162,12 @@ const Register = () => {
 
         <CardFooter className="flex flex-col space-y-4 p-6 bg-gray-50/50 rounded-b-lg">
           <Button
-            type="submit"
-            form="registration-form"
+            onClick={() => {
+              const form = document.querySelector('form');
+              if (form) {
+                form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+              }
+            }}
             className="w-full bg-green-600 hover:bg-green-700 transition-all duration-300 text-white font-medium shadow-lg hover:shadow-xl"
             disabled={loading}
           >
