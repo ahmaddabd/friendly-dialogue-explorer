@@ -1,3 +1,5 @@
+import { lazy } from 'react';
+
 export const lazyWithPreload = <T extends Promise<any>>(
   factory: () => T
 ): { preload: () => T; Component: React.LazyExoticComponent<any> } => {
