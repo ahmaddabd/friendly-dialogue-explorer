@@ -1,14 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Globe } from 'lucide-react';
 
 export const LanguageSwitcher = () => {
   const [lang, setLang] = useState<'ar' | 'en'>('ar');
 
+  useEffect(() => {
+    // Set initial direction and language
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang;
+  }, []);
+
   const toggleLang = () => {
-    setLang(lang === 'ar' ? 'en' : 'ar');
-    document.documentElement.dir = lang === 'ar' ? 'ltr' : 'rtl';
-    document.documentElement.lang = lang === 'ar' ? 'en' : 'ar';
+    const newLang = lang === 'ar' ? 'en' : 'ar';
+    setLang(newLang);
+    document.documentElement.dir = newLang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = newLang;
   };
 
   return (

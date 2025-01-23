@@ -24,6 +24,7 @@ export const FeatureCard = ({
 }: FeatureCardProps) => {
   const IconComponent = icons[icon];
   const isRTL = document.documentElement.dir === 'rtl';
+  const currentLang = document.documentElement.lang;
 
   return (
     <Card className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden">
@@ -34,13 +35,11 @@ export const FeatureCard = ({
           <IconComponent className="w-12 h-12 text-green-600 mb-6 transform transition-transform group-hover:scale-110 duration-300" />
           
           <h3 className="text-xl font-bold text-green-800 mb-2">
-            <span className="block mb-1">{isRTL ? titleAr : titleEn}</span>
-            <span className="block text-lg text-gray-600">{isRTL ? titleEn : titleAr}</span>
+            {currentLang === 'ar' ? titleAr : titleEn}
           </h3>
           
           <p className="text-gray-600">
-            <span className="block mb-1">{isRTL ? descriptionAr : descriptionEn}</span>
-            <span className="block text-sm text-gray-500">{isRTL ? descriptionEn : descriptionAr}</span>
+            {currentLang === 'ar' ? descriptionAr : descriptionEn}
           </p>
         </div>
       </div>
