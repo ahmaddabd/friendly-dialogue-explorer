@@ -24,6 +24,15 @@
     --input: 240 5.9% 90%;
     --ring: 142.1 76.2% 36.3%;
     --radius: 1rem;
+
+    /* Sidebar Colors */
+    --sidebar-bg: 0 0% 100%;
+    --sidebar-fg: 222.2 84% 4.9%;
+    --sidebar-border: 240 5.9% 90%;
+    --sidebar-accent: 142.1 76.2% 36.3%;
+    --sidebar-accent-fg: 355.7 100% 97.3%;
+    --sidebar-muted: 240 4.8% 95.9%;
+    --sidebar-ring: 142.1 76.2% 36.3%;
   }
 
   .dark {
@@ -46,6 +55,15 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 142.4 71.8% 29.2%;
+
+    /* Sidebar Colors - Dark Mode */
+    --sidebar-bg: 20 14.3% 4.1%;
+    --sidebar-fg: 0 0% 95%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-accent: 142.1 70.6% 45.3%;
+    --sidebar-accent-fg: 144.9 80.4% 10%;
+    --sidebar-muted: 0 0% 15%;
+    --sidebar-ring: 142.4 71.8% 29.2%;
   }
 }
 
@@ -171,4 +189,21 @@ html {
 
 .toast-exit-active {
   @apply transform translate-y-2 opacity-0 transition-all duration-300;
+}
+
+/* Sidebar Specific Styles */
+.sidebar-menu-item {
+  @apply transition-colors duration-200 hover:bg-sidebar-accent/10 rounded-md;
+}
+
+.sidebar-group {
+  @apply border-b border-sidebar-border/50 last:border-0 py-2;
+}
+
+.sidebar-label {
+  @apply text-xs font-medium text-sidebar-fg/60 px-3 py-2;
+}
+
+.sidebar-content {
+  @apply space-y-1 p-2;
 }
