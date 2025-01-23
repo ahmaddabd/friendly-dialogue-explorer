@@ -2,23 +2,49 @@ import { useState } from "react";
 import { useLanguage } from "@/components/LanguageSwitcher";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { ArrowLeft, ArrowRight, Mail, Lock } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
 
 const Login = () => {
   const { lang } = useLanguage();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const Arrow = lang === 'ar' ? ArrowLeft : ArrowRight;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: lang === 'ar' ? "جاري المعالجة" : "Processing",
-      description: lang === 'ar' ? "جاري التحقق من بياناتك" : "Verifying your credentials",
-    });
+    setLoading(true);
+
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: lang === 'ar' ? "تم تسجيل الدخول بنجاح" : "Logged in successfully",
+        description: lang === 'ar' 
+          ? "سيتم توجيهك إلى لوحة التحكم" 
+          : "You will be redirected to the dashboard",
+      });
+
+      navigate('/');
+    } catch (error: any) {
+      toast({
+        title: lang === 'ar' ? "خطأ" : "Error",
+        description: error.message,
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -91,8 +117,12 @@ const Login = () => {
             <Button
               type="submit"
               className="w-full bg-green-600 hover:bg-green-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+              disabled={loading}
             >
-              {lang === 'ar' ? "تسجيل الدخول" : "Sign in"}
+              {loading 
+                ? (lang === 'ar' ? "جاري تسجيل الدخول..." : "Signing in...")
+                : (lang === 'ar' ? "تسجيل الدخول" : "Sign in")
+              }
               <Arrow className="ml-2 h-5 w-5" />
             </Button>
             <p className="text-center text-sm text-gray-600">

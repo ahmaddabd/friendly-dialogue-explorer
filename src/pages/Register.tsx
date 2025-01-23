@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLanguage } from "@/components/LanguageSwitcher";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,25 +9,66 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EmailRegistrationForm } from "@/components/auth/EmailRegistrationForm";
 import { PhoneRegistrationForm } from "@/components/auth/PhoneRegistrationForm";
 import { RegistrationSteps } from "@/components/auth/RegistrationSteps";
+import { supabase } from "@/integrations/supabase/client";
 
 const Register = () => {
   const { lang } = useLanguage();
+  const navigate = useNavigate();
   const [step, setStep] = useState<1 | 2>(1);
+  const [loading, setLoading] = useState(false);
   const Arrow = lang === 'ar' ? ArrowLeft : ArrowRight;
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = async (values: any) => {
     if (step === 1) {
       setStep(2);
       return;
     }
 
-    toast({
-      title: lang === 'ar' ? "تم إنشاء الحساب بنجاح" : "Account created successfully",
-      description: lang === 'ar' 
-        ? "سيتم توجيهك إلى لوحة التحكم"
-        : "You will be redirected to the dashboard",
-    });
-    console.log(values);
+    setLoading(true);
+    try {
+      // Register the user
+      const { error: signUpError } = await supabase.auth.signUp({
+        email: values.email,
+        password: values.password,
+        options: {
+          data: {
+            full_name: values.ownerName,
+          }
+        }
+      });
+
+      if (signUpError) throw signUpError;
+
+      // Create the store
+      const { error: storeError } = await supabase
+        .from('stores')
+        .insert([
+          {
+            name: values.storeName,
+            owner_id: (await supabase.auth.getUser()).data.user?.id,
+            status: 'pending'
+          }
+        ]);
+
+      if (storeError) throw storeError;
+
+      toast({
+        title: lang === 'ar' ? "تم إنشاء الحساب بنجاح" : "Account created successfully",
+        description: lang === 'ar' 
+          ? "سيتم توجيهك إلى لوحة التحكم"
+          : "You will be redirected to the dashboard",
+      });
+
+      navigate('/');
+    } catch (error: any) {
+      toast({
+        title: lang === 'ar' ? "خطأ" : "Error",
+        description: error.message,
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -65,28 +106,28 @@ const Register = () => {
         </CardHeader>
 
         <CardContent className="p-6 border-t border-b border-gray-100">
-          <Tabs defaultValue="phone" className="w-full">
+          <Tabs defaultValue="email" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger 
-                value="phone"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white transition-all duration-200"
-              >
-                {lang === 'ar' ? "رقم الهاتف" : "Phone"}
-              </TabsTrigger>
               <TabsTrigger 
                 value="email"
                 className="data-[state=active]:bg-green-600 data-[state=active]:text-white transition-all duration-200"
               >
                 {lang === 'ar' ? "البريد الإلكتروني" : "Email"}
               </TabsTrigger>
+              <TabsTrigger 
+                value="phone"
+                className="data-[state=active]:bg-green-600 data-[state=active]:text-white transition-all duration-200"
+              >
+                {lang === 'ar' ? "رقم الهاتف" : "Phone"}
+              </TabsTrigger>
             </TabsList>
-
-            <TabsContent value="phone">
-              <PhoneRegistrationForm onSubmit={handleSubmit} step={step} />
-            </TabsContent>
 
             <TabsContent value="email">
               <EmailRegistrationForm onSubmit={handleSubmit} step={step} />
+            </TabsContent>
+
+            <TabsContent value="phone">
+              <PhoneRegistrationForm onSubmit={handleSubmit} step={step} />
             </TabsContent>
           </Tabs>
         </CardContent>
@@ -96,10 +137,14 @@ const Register = () => {
             type="submit"
             form="registration-form"
             className="w-full bg-green-600 hover:bg-green-700 transition-all duration-300 text-white font-medium shadow-lg hover:shadow-xl"
+            disabled={loading}
           >
-            {step === 1 
-              ? lang === 'ar' ? "التالي" : "Next"
-              : lang === 'ar' ? "إنشاء الحساب" : "Create Account"
+            {loading 
+              ? (lang === 'ar' ? "جاري المعالجة..." : "Processing...")
+              : (step === 1 
+                  ? (lang === 'ar' ? "التالي" : "Next")
+                  : (lang === 'ar' ? "إنشاء الحساب" : "Create Account")
+                )
             }
             <Arrow className="rtl:mr-2 ltr:ml-2 h-5 w-5" />
           </Button>
