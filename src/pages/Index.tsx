@@ -11,18 +11,18 @@ import { Skeleton } from "@/components/ui/skeleton";
 const Index = () => {
   return (
     <MainLayout>
-      <div className="min-h-screen bg-gradient-to-b from-green-50/50">
+      <div className="min-h-screen bg-gradient-to-br from-green-50/50 via-white to-green-50/50 animate-gradient-x">
         <Hero />
-        <Suspense fallback={<Skeleton className="h-40" />}>
+        <Suspense fallback={<Skeleton className="h-40 bg-green-100/20" />}>
           <Stats />
         </Suspense>
-        <Suspense fallback={<Skeleton className="h-96" />}>
+        <Suspense fallback={<Skeleton className="h-96 bg-green-100/20" />}>
           <Features />
         </Suspense>
-        <Suspense fallback={<Skeleton className="h-96" />}>
+        <Suspense fallback={<Skeleton className="h-96 bg-green-100/20" />}>
           <Testimonials />
         </Suspense>
-        <Suspense fallback={<Skeleton className="h-96" />}>
+        <Suspense fallback={<Skeleton className="h-96 bg-green-100/20" />}>
           <FAQ />
         </Suspense>
         <CTA />
