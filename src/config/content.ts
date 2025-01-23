@@ -47,7 +47,17 @@ export const content = {
         en: "Available in Damascus, expanding to all governorates"
       }
     }
-  ]
+  ],
+  stats: {
+    stores: "+1000",
+    sales: "+50,000",
+    support: "24/7"
+  },
+  contact: {
+    phone: "+963 11 123 4567",
+    email: "info@dikantek.com",
+    address: "دمشق، سوريا"
+  }
 };
 
 export const theme = {
