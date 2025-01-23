@@ -32,11 +32,11 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-green-50 py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md shadow-lg border-green-100">
-        <CardHeader className="space-y-2 text-center">
+      <Card className="w-full max-w-md shadow-xl border border-green-100/20 backdrop-blur-sm bg-white/80">
+        <CardHeader className="space-y-2 text-center pb-6">
           <Link 
             to="/" 
-            className="text-green-600 hover:text-green-700 transition-colors text-xl font-bold mb-6 block"
+            className="text-green-600 hover:text-green-700 transition-colors text-xl font-bold mb-6 inline-block"
           >
             {lang === 'ar' ? "دكان تك" : "Dukan Tech"}
           </Link>
@@ -57,18 +57,18 @@ const Register = () => {
           </CardDescription>
         </CardHeader>
 
-        <CardContent className="p-6">
+        <CardContent className="p-6 border-t border-b border-gray-100">
           <Tabs defaultValue="phone" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6">
               <TabsTrigger 
                 value="phone"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white"
+                className="data-[state=active]:bg-green-600 data-[state=active]:text-white transition-all duration-200"
               >
                 {lang === 'ar' ? "رقم الهاتف" : "Phone"}
               </TabsTrigger>
               <TabsTrigger 
                 value="email"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white"
+                className="data-[state=active]:bg-green-600 data-[state=active]:text-white transition-all duration-200"
               >
                 {lang === 'ar' ? "البريد الإلكتروني" : "Email"}
               </TabsTrigger>
@@ -84,7 +84,7 @@ const Register = () => {
           </Tabs>
         </CardContent>
 
-        <CardFooter className="flex flex-col space-y-4 p-6 bg-gray-50 rounded-b-lg">
+        <CardFooter className="flex flex-col space-y-4 p-6 bg-gray-50/50 rounded-b-lg">
           <Button
             type="submit"
             form="registration-form"
