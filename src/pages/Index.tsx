@@ -6,10 +6,12 @@ import { Testimonials } from "@/components/sections/Testimonials";
 import { FAQ } from "@/components/sections/FAQ";
 import { CTA } from "@/components/sections/CTA";
 import { Footer } from "@/components/sections/Footer";
+import { AnnouncementBar } from "@/components/AnnouncementBar";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50/50">
+      <AnnouncementBar />
       <Navigation />
       <Hero />
       <Stats />
