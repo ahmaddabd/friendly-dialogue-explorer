@@ -4,10 +4,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { LanguageProvider } from "./components/LanguageSwitcher";
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// Lazy load pages with prefetching
+// Lazy load pages
 const Index = lazy(() => import("./pages/Index"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
@@ -18,8 +18,8 @@ const queryClient = new QueryClient({
     queries: {
       refetchOnWindowFocus: false,
       retry: 1,
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      gcTime: 10 * 60 * 1000, // 10 minutes
+      staleTime: 5 * 60 * 1000,
+      gcTime: 10 * 60 * 1000,
     },
   },
 });
@@ -31,20 +31,6 @@ const LoadingFallback = () => (
 );
 
 const App = () => {
-  // Prefetch routes
-  useEffect(() => {
-    const prefetchRoutes = async () => {
-      if ('requestIdleCallback' in window) {
-        // @ts-ignore - requestIdleCallback is not in TypeScript's lib
-        window.requestIdleCallback(() => {
-          import('./pages/Login');
-          import('./pages/Register');
-        });
-      }
-    };
-    prefetchRoutes();
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
