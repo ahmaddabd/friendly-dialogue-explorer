@@ -2,25 +2,14 @@ import { MainLayout } from "@/layouts/MainLayout";
 import { Hero } from "@/components/sections/Hero";
 import { Stats } from "@/components/sections/Stats";
 import { Features } from "@/components/sections/Features";
+import { FeaturedStores } from "@/components/sections/FeaturedStores";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { FAQ } from "@/components/sections/FAQ";
 import { CTA } from "@/components/sections/CTA";
-import { Suspense, useEffect } from "react";
+import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useToast } from "@/hooks/use-toast";
-import { PhoneAuth } from "@/components/auth/PhoneAuth";
 
 const Index = () => {
-  const { toast } = useToast();
-
-  useEffect(() => {
-    toast({
-      title: "مرحباً بك في دكان تك",
-      description: "نحن سعداء بوجودك معنا. استكشف خدماتنا وابدأ رحلتك معنا.",
-      className: "bg-green-50 border-green-200",
-    });
-  }, []);
-
   return (
     <MainLayout>
       <div className="min-h-screen bg-gradient-to-br from-green-50/50 via-white to-green-50/50 animate-gradient-x relative overflow-hidden">
@@ -40,10 +29,6 @@ const Index = () => {
           >
             <Hero />
           </Suspense>
-
-          <div className="py-12 px-4">
-            <PhoneAuth />
-          </div>
 
           <Suspense 
             fallback={
@@ -67,6 +52,20 @@ const Index = () => {
             }
           >
             <Features />
+          </Suspense>
+
+          <Suspense 
+            fallback={
+              <div className="py-20 px-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                  {[1, 2, 3].map((i) => (
+                    <Skeleton key={i} className="h-64 rounded-xl animate-pulse bg-green-100/20" />
+                  ))}
+                </div>
+              </div>
+            }
+          >
+            <FeaturedStores />
           </Suspense>
 
           <Suspense 

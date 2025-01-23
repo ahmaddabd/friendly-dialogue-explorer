@@ -9,6 +9,62 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      coupons: {
+        Row: {
+          code: string
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          min_order_amount: number | null
+          starts_at: string | null
+          status: string | null
+          store_id: string | null
+          type: string
+          updated_at: string | null
+          usage_limit: number | null
+          used_count: number | null
+          value: number
+        }
+        Insert: {
+          code: string
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          min_order_amount?: number | null
+          starts_at?: string | null
+          status?: string | null
+          store_id?: string | null
+          type: string
+          updated_at?: string | null
+          usage_limit?: number | null
+          used_count?: number | null
+          value: number
+        }
+        Update: {
+          code?: string
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          min_order_amount?: number | null
+          starts_at?: string | null
+          status?: string | null
+          store_id?: string | null
+          type?: string
+          updated_at?: string | null
+          usage_limit?: number | null
+          used_count?: number | null
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coupons_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "stores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       orders: {
         Row: {
           created_at: string
@@ -180,10 +236,14 @@ export type Database = {
       }
       stores: {
         Row: {
+          bank_account: Json | null
+          business_type: string | null
           category: string
           cover_url: string | null
           created_at: string
+          currency: string | null
           description: string | null
+          email: string | null
           featured: boolean | null
           id: string
           location: string | null
@@ -192,12 +252,15 @@ export type Database = {
           name: string
           owner_id: string
           payment_methods: Json | null
+          phone: string | null
           products_count: number | null
           rating: number | null
           reviews_count: number | null
+          settings: Json | null
           shipping_zones: Json | null
           social_media: Json | null
           status: string | null
+          store_type: string | null
           store_url: string | null
           subscription_plan: string | null
           subscription_status: string | null
@@ -209,10 +272,14 @@ export type Database = {
           working_hours: Json | null
         }
         Insert: {
+          bank_account?: Json | null
+          business_type?: string | null
           category: string
           cover_url?: string | null
           created_at?: string
+          currency?: string | null
           description?: string | null
+          email?: string | null
           featured?: boolean | null
           id?: string
           location?: string | null
@@ -221,12 +288,15 @@ export type Database = {
           name: string
           owner_id: string
           payment_methods?: Json | null
+          phone?: string | null
           products_count?: number | null
           rating?: number | null
           reviews_count?: number | null
+          settings?: Json | null
           shipping_zones?: Json | null
           social_media?: Json | null
           status?: string | null
+          store_type?: string | null
           store_url?: string | null
           subscription_plan?: string | null
           subscription_status?: string | null
@@ -238,10 +308,14 @@ export type Database = {
           working_hours?: Json | null
         }
         Update: {
+          bank_account?: Json | null
+          business_type?: string | null
           category?: string
           cover_url?: string | null
           created_at?: string
+          currency?: string | null
           description?: string | null
+          email?: string | null
           featured?: boolean | null
           id?: string
           location?: string | null
@@ -250,12 +324,15 @@ export type Database = {
           name?: string
           owner_id?: string
           payment_methods?: Json | null
+          phone?: string | null
           products_count?: number | null
           rating?: number | null
           reviews_count?: number | null
+          settings?: Json | null
           shipping_zones?: Json | null
           social_media?: Json | null
           status?: string | null
+          store_type?: string | null
           store_url?: string | null
           subscription_plan?: string | null
           subscription_status?: string | null
@@ -270,6 +347,42 @@ export type Database = {
           {
             foreignKeyName: "stores_owner_id_fkey"
             columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wishlists: {
+        Row: {
+          created_at: string | null
+          id: string
+          product_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          product_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          product_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wishlists_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "wishlists_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
