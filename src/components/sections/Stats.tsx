@@ -12,7 +12,7 @@ export const Stats = () => {
       labelAr: "متجر نشط",
       labelEn: "Active Stores",
       color: "text-blue-600",
-      bgColor: "bg-blue-50"
+      bgColor: "bg-blue-50/50"
     },
     {
       icon: Users,
@@ -20,7 +20,7 @@ export const Stats = () => {
       labelAr: "عملية بيع شهرياً",
       labelEn: "Monthly Sales",
       color: "text-green-600",
-      bgColor: "bg-green-50"
+      bgColor: "bg-green-50/50"
     },
     {
       icon: Clock,
@@ -28,13 +28,24 @@ export const Stats = () => {
       labelAr: "ساعة دعم يومياً",
       labelEn: "Hours Support Daily",
       color: "text-purple-600",
-      bgColor: "bg-purple-50"
+      bgColor: "bg-purple-50/50"
     }
   ];
 
   return (
     <section className="py-20 bg-gradient-to-br from-white via-green-50/30 to-white">
       <div className="container mx-auto px-4">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            {lang === 'ar' ? "إحصائيات مميزة" : "Key Statistics"}
+          </h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            {lang === 'ar' 
+              ? "نفخر بتقديم خدماتنا لآلاف العملاء ونسعى دائماً للتطور والنمو"
+              : "We are proud to serve thousands of customers and always strive for growth and development"
+            }
+          </p>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {stats.map((stat, index) => (
             <div 
@@ -46,7 +57,10 @@ export const Stats = () => {
                 <div className={`${stat.color} mb-4`}>
                   <stat.icon className="w-12 h-12 transform transition-transform group-hover:scale-110 duration-300" />
                 </div>
-                <div className="text-4xl font-bold text-gray-800 mb-2 animate-fade-in" style={{ animationDelay: `${index * 200}ms` }}>
+                <div 
+                  className="text-4xl font-bold text-gray-800 mb-2 animate-fade-in" 
+                  style={{ animationDelay: `${index * 200}ms` }}
+                >
                   {stat.value}
                 </div>
                 <div className="text-gray-600 text-lg font-medium">
