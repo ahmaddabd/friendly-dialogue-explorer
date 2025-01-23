@@ -11,29 +11,26 @@ const Register = () => {
   const [formData, setFormData] = useState<any>(null);
 
   const handleSubmit = async (values: any) => {
-    console.log("Form submitted with values:", values);
+    console.log("Register page - handleSubmit called with values:", values);
     
     if (step === 1) {
-      console.log("Step 1: Moving to step 2");
-      // Store form data and move to next step
+      console.log("Step 1: Storing form data and moving to step 2");
       setFormData(values);
       setStep(2);
       return;
     }
 
-    // Combine data from both steps
     const finalData = {
       ...formData,
       ...values
     };
     
     console.log("Step 2: Submitting final data:", finalData);
-
     setLoading(true);
+
     try {
       console.log("Attempting to register user with email:", finalData.email);
       
-      // Register the user
       const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email: finalData.email,
         password: finalData.password,
@@ -63,14 +60,23 @@ const Register = () => {
         return;
       }
 
+      if (!signUpData.user) {
+        console.error("No user data returned after signup");
+        toast({
+          title: "خطأ",
+          description: "حدث خطأ أثناء إنشاء الحساب",
+          variant: "destructive"
+        });
+        return;
+      }
+
       console.log("User registered successfully:", signUpData);
 
-      // Create the store
       const { error: storeError } = await supabase
         .from('stores')
         .insert({
           name: finalData.storeName,
-          owner_id: signUpData.user?.id,
+          owner_id: signUpData.user.id,
           category: 'general',
           status: 'pending',
           store_settings: {
@@ -112,7 +118,6 @@ const Register = () => {
         description: "سيتم توجيهك إلى لوحة التحكم",
       });
 
-      // Redirect to dashboard
       navigate('/dashboard');
     } catch (error: any) {
       console.error("Unexpected error:", error);
@@ -126,17 +131,13 @@ const Register = () => {
     }
   };
 
-  const handleBack = () => {
-    setStep(1);
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <RegistrationForm 
         onSubmit={handleSubmit}
         loading={loading}
         step={step}
-        onStepChange={handleBack}
+        onStepChange={() => setStep(1)}
       />
     </div>
   );

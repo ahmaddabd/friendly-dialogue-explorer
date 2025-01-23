@@ -8,10 +8,20 @@ import { Mail, Lock, Store, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const emailFormSchema = z.object({
-  email: z.string().email("البريد الإلكتروني غير صالح"),
-  password: z.string().min(8, "كلمة المرور يجب أن تكون 8 أحرف على الأقل"),
-  storeName: z.string().min(3, "اسم المتجر يجب أن يكون 3 أحرف على الأقل"),
-  ownerName: z.string().min(3, "اسم المالك يجب أن يكون 3 أحرف على الأقل"),
+  email: z.string()
+    .email("البريد الإلكتروني غير صالح")
+    .min(1, "البريد الإلكتروني مطلوب"),
+  password: z.string()
+    .min(8, "كلمة المرور يجب أن تكون 8 أحرف على الأقل")
+    .regex(/[A-Z]/, "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل")
+    .regex(/[a-z]/, "يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل")
+    .regex(/[0-9]/, "يجب أن تحتوي كلمة المرور على رقم واحد على الأقل"),
+  storeName: z.string()
+    .min(3, "اسم المتجر يجب أن يكون 3 أحرف على الأقل")
+    .max(50, "اسم المتجر يجب أن لا يتجاوز 50 حرف"),
+  ownerName: z.string()
+    .min(3, "اسم المالك يجب أن يكون 3 أحرف على الأقل")
+    .max(50, "اسم المالك يجب أن لا يتجاوز 50 حرف"),
 });
 
 type EmailFormData = z.infer<typeof emailFormSchema>;
@@ -34,6 +44,7 @@ export const EmailRegistrationForm = ({ onSubmit, step, loading }: EmailRegistra
       storeName: "",
       ownerName: "",
     },
+    mode: "onChange"
   });
 
   console.log("Form errors:", form.formState.errors);
@@ -47,6 +58,7 @@ export const EmailRegistrationForm = ({ onSubmit, step, loading }: EmailRegistra
       await onSubmit(data);
     } catch (error) {
       console.error("Error in form submission:", error);
+      throw error; // Re-throw to be handled by the parent component
     }
   };
 
@@ -71,6 +83,7 @@ export const EmailRegistrationForm = ({ onSubmit, step, loading }: EmailRegistra
                     <Mail className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
                     <FormControl>
                       <Input
+                        type="email"
                         placeholder={lang === 'ar' ? "أدخل بريدك الإلكتروني" : "Enter your email"}
                         className="pl-10"
                         {...field}
@@ -115,7 +128,7 @@ export const EmailRegistrationForm = ({ onSubmit, step, loading }: EmailRegistra
             <Button 
               type="submit"
               className="w-full bg-green-600 hover:bg-green-700"
-              disabled={loading}
+              disabled={loading || !form.formState.isValid}
               onClick={() => console.log("Next button clicked")}
             >
               {loading 
@@ -181,7 +194,7 @@ export const EmailRegistrationForm = ({ onSubmit, step, loading }: EmailRegistra
             <Button 
               type="submit"
               className="w-full bg-green-600 hover:bg-green-700"
-              disabled={loading}
+              disabled={loading || !form.formState.isValid}
               onClick={() => console.log("Create Account button clicked")}
             >
               {loading 
