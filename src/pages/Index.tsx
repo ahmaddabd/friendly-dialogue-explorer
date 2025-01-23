@@ -7,7 +7,8 @@ import { FAQ } from "@/components/sections/FAQ";
 import { CTA } from "@/components/sections/CTA";
 import { Suspense, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
+import { PhoneAuth } from "@/components/auth/PhoneAuth";
 
 const Index = () => {
   const { toast } = useToast();
@@ -39,6 +40,10 @@ const Index = () => {
           >
             <Hero />
           </Suspense>
+
+          <div className="py-12 px-4">
+            <PhoneAuth />
+          </div>
 
           <Suspense 
             fallback={
