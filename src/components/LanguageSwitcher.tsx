@@ -1,21 +1,40 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, createContext, useContext } from 'react';
 import { Button } from "@/components/ui/button";
 import { Globe } from 'lucide-react';
 
-export const LanguageSwitcher = () => {
+type LanguageContextType = {
+  lang: 'ar' | 'en';
+  setLang: (lang: 'ar' | 'en') => void;
+};
+
+export const LanguageContext = createContext<LanguageContextType>({
+  lang: 'ar',
+  setLang: () => {},
+});
+
+export const useLanguage = () => useContext(LanguageContext);
+
+export const LanguageProvider = ({ children }: { children: React.ReactNode }) => {
   const [lang, setLang] = useState<'ar' | 'en'>('ar');
 
   useEffect(() => {
-    // Set initial direction and language
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
-  }, []);
+  }, [lang]);
+
+  return (
+    <LanguageContext.Provider value={{ lang, setLang }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+};
+
+export const LanguageSwitcher = () => {
+  const { lang, setLang } = useLanguage();
 
   const toggleLang = () => {
     const newLang = lang === 'ar' ? 'en' : 'ar';
     setLang(newLang);
-    document.documentElement.dir = newLang === 'ar' ? 'rtl' : 'ltr';
-    document.documentElement.lang = newLang;
   };
 
   return (
