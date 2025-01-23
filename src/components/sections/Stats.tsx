@@ -1,32 +1,5 @@
 import { content } from "@/config/content";
 import { useLanguage } from "@/components/LanguageSwitcher";
-import { Users, ShoppingBag, Headphones } from "lucide-react";
-
-export const Stats = () => {
-  const { lang } = useLanguage();
-
-  const stats = [
-    {
-      value: content.stats.stores,
-      icon: ShoppingBag,
-      labelAr: "متجر نشط",
-      labelEn: "Active Stores",
-      color: "text-purple-600",
-      bgColor: "bg-purple-100"
-    },
-    {
-      value: content.stats.sales,
-      icon: Users,
-      labelAr: "ع
-
-حسناً، سنبدأ بتنفيذ التحسينات الفورية للصفحة الرئيسية، مع التركيز على إضافة قسم الإحصائيات وتحسين قسم الميزات.
-
-<lov-code>
-سنقوم بتحديث ملف Stats.tsx لإضافة تأثيرات حركية وتحسين التصميم:
-
-<lov-write file_path="src/components/sections/Stats.tsx">
-import { content } from "@/config/content";
-import { useLanguage } from "@/components/LanguageSwitcher";
 import { Users, ShoppingBag, Clock } from "lucide-react";
 
 export const Stats = () => {
@@ -34,25 +7,28 @@ export const Stats = () => {
 
   const stats = [
     {
-      icon: Users,
+      icon: ShoppingBag,
       value: content.stats.stores,
       labelAr: "متجر نشط",
       labelEn: "Active Stores",
-      color: "text-blue-600"
+      color: "text-blue-600",
+      bgColor: "bg-blue-50"
     },
     {
-      icon: ShoppingBag,
+      icon: Users,
       value: content.stats.sales,
       labelAr: "عملية بيع شهرياً",
       labelEn: "Monthly Sales",
-      color: "text-green-600"
+      color: "text-green-600",
+      bgColor: "bg-green-50"
     },
     {
       icon: Clock,
       value: content.stats.support,
-      labelAr: "دعم فني متواصل",
-      labelEn: "Technical Support",
-      color: "text-purple-600"
+      labelAr: "ساعة دعم يومياً",
+      labelEn: "Hours Support Daily",
+      color: "text-purple-600",
+      bgColor: "bg-purple-50"
     }
   ];
 
@@ -63,15 +39,17 @@ export const Stats = () => {
           {stats.map((stat, index) => (
             <div 
               key={index}
-              className="group relative bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+              className={`group relative overflow-hidden rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 ${stat.bgColor}`}
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-gray-50 to-gray-100 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-150 duration-500" />
-              <div className="relative">
-                <stat.icon className={`w-12 h-12 ${stat.color} mb-4 transform transition-transform group-hover:scale-110 duration-300`} />
+              <div className="absolute top-0 left-0 w-full h-full bg-white/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="relative z-10">
+                <div className={`${stat.color} mb-4`}>
+                  <stat.icon className="w-12 h-12 transform transition-transform group-hover:scale-110 duration-300" />
+                </div>
                 <div className="text-4xl font-bold text-gray-800 mb-2 animate-fade-in" style={{ animationDelay: `${index * 200}ms` }}>
                   {stat.value}
                 </div>
-                <div className="text-gray-600 text-lg">
+                <div className="text-gray-600 text-lg font-medium">
                   {lang === 'ar' ? stat.labelAr : stat.labelEn}
                 </div>
               </div>
