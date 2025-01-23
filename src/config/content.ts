@@ -1,50 +1,41 @@
 export const content = {
   hero: {
-    title: {
-      ar: "دكان تك",
-      en: "Dikantek"
-    },
-    subtitle: {
-      ar: "منصتك المتكاملة لإدارة المتجر الرقمي",
-      en: "Your Complete Digital Store Management Platform"
-    },
-    description: {
-      ar: "نقدم لك حلولاً متكاملة لإدارة متجرك بكفاءة عالية وأمان تام",
-      en: "We provide comprehensive solutions for efficient and secure store management"
-    }
+    title: "منصة متكاملة لإدارة متجرك الإلكتروني",
+    subtitle: "ابدأ تجارتك الإلكترونية اليوم",
+    description: "نقدم لك حلولاً متكاملة لإدارة متجرك بكفاءة عالية وأمان تام"
   },
   features: [
     {
       icon: "Store",
       title: {
-        ar: "جميع أنواع المتاجر",
-        en: "All Store Types"
+        ar: "متجر احترافي",
+        en: "Professional Store"
       },
       description: {
-        ar: "ندعم المتاجر التجارية والصناعية والخدمية",
-        en: "Supporting commercial, industrial, and service stores"
+        ar: "صمم متجرك بشكل احترافي مع قوالب عصرية",
+        en: "Design your store professionally with modern templates"
       }
     },
     {
       icon: "ShieldCheck",
       title: {
-        ar: "حماية وأمان",
-        en: "Security & Safety"
+        ar: "حماية متكاملة",
+        en: "Complete Protection"
       },
       description: {
-        ar: "متاجر موثقة رسمياً مع حماية كاملة",
-        en: "Officially verified stores with complete protection"
+        ar: "حماية كاملة لمتجرك وبيانات عملائك",
+        en: "Full protection for your store and customer data"
       }
     },
     {
       icon: "MapPin",
       title: {
-        ar: "تغطية واسعة",
-        en: "Wide Coverage"
+        ar: "إدارة المبيعات",
+        en: "Sales Management"
       },
       description: {
-        ar: "متوفر في دمشق وقريباً في جميع المحافظات",
-        en: "Available in Damascus, expanding to all governorates"
+        ar: "تتبع وإدارة مبيعاتك بسهولة وفعالية",
+        en: "Track and manage your sales easily and effectively"
       }
     }
   ],
