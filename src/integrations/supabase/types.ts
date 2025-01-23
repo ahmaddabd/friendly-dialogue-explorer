@@ -65,6 +65,48 @@ export type Database = {
           },
         ]
       }
+      featured_products: {
+        Row: {
+          created_at: string | null
+          end_date: string | null
+          id: string
+          product_id: string | null
+          start_date: string | null
+          store_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          end_date?: string | null
+          id?: string
+          product_id?: string | null
+          start_date?: string | null
+          store_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          end_date?: string | null
+          id?: string
+          product_id?: string | null
+          start_date?: string | null
+          store_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "featured_products_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "featured_products_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "stores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       orders: {
         Row: {
           created_at: string
@@ -234,6 +276,51 @@ export type Database = {
         }
         Relationships: []
       }
+      store_visits: {
+        Row: {
+          id: string
+          ip_address: string | null
+          referrer: string | null
+          store_id: string | null
+          user_agent: string | null
+          visited_at: string | null
+          visitor_id: string | null
+        }
+        Insert: {
+          id?: string
+          ip_address?: string | null
+          referrer?: string | null
+          store_id?: string | null
+          user_agent?: string | null
+          visited_at?: string | null
+          visitor_id?: string | null
+        }
+        Update: {
+          id?: string
+          ip_address?: string | null
+          referrer?: string | null
+          store_id?: string | null
+          user_agent?: string | null
+          visited_at?: string | null
+          visitor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "store_visits_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "stores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "store_visits_visitor_id_fkey"
+            columns: ["visitor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       stores: {
         Row: {
           bank_account: Json | null
@@ -246,6 +333,7 @@ export type Database = {
           email: string | null
           featured: boolean | null
           id: string
+          is_verified: boolean | null
           location: string | null
           logo_url: string | null
           merchant_code: string | null
@@ -260,14 +348,19 @@ export type Database = {
           shipping_zones: Json | null
           social_media: Json | null
           status: string | null
+          store_domain: string | null
+          store_settings: Json | null
           store_type: string | null
           store_url: string | null
+          subscription_end_date: string | null
           subscription_plan: string | null
+          subscription_start_date: string | null
           subscription_status: string | null
           tags: string[] | null
           tax_settings: Json | null
           theme_settings: Json | null
           updated_at: string
+          verification_documents: Json | null
           views: number | null
           working_hours: Json | null
         }
@@ -282,6 +375,7 @@ export type Database = {
           email?: string | null
           featured?: boolean | null
           id?: string
+          is_verified?: boolean | null
           location?: string | null
           logo_url?: string | null
           merchant_code?: string | null
@@ -296,14 +390,19 @@ export type Database = {
           shipping_zones?: Json | null
           social_media?: Json | null
           status?: string | null
+          store_domain?: string | null
+          store_settings?: Json | null
           store_type?: string | null
           store_url?: string | null
+          subscription_end_date?: string | null
           subscription_plan?: string | null
+          subscription_start_date?: string | null
           subscription_status?: string | null
           tags?: string[] | null
           tax_settings?: Json | null
           theme_settings?: Json | null
           updated_at?: string
+          verification_documents?: Json | null
           views?: number | null
           working_hours?: Json | null
         }
@@ -318,6 +417,7 @@ export type Database = {
           email?: string | null
           featured?: boolean | null
           id?: string
+          is_verified?: boolean | null
           location?: string | null
           logo_url?: string | null
           merchant_code?: string | null
@@ -332,14 +432,19 @@ export type Database = {
           shipping_zones?: Json | null
           social_media?: Json | null
           status?: string | null
+          store_domain?: string | null
+          store_settings?: Json | null
           store_type?: string | null
           store_url?: string | null
+          subscription_end_date?: string | null
           subscription_plan?: string | null
+          subscription_start_date?: string | null
           subscription_status?: string | null
           tags?: string[] | null
           tax_settings?: Json | null
           theme_settings?: Json | null
           updated_at?: string
+          verification_documents?: Json | null
           views?: number | null
           working_hours?: Json | null
         }
@@ -401,6 +506,16 @@ export type Database = {
       increment_store_views: {
         Args: {
           store_id: string
+        }
+        Returns: undefined
+      }
+      track_store_visit: {
+        Args: {
+          p_store_id: string
+          p_visitor_id: string
+          p_ip_address: string
+          p_user_agent: string
+          p_referrer: string
         }
         Returns: undefined
       }

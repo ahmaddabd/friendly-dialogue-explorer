@@ -45,14 +45,34 @@ const Register = () => {
         return;
       }
 
-      // Create the store
+      // Create the store with enhanced settings
       const { error: storeError } = await supabase
         .from('stores')
         .insert({
           name: values.storeName,
           owner_id: signUpData.user?.id,
           category: 'general',
-          status: 'pending'
+          status: 'pending',
+          store_settings: {
+            theme: "default",
+            colors: {
+              primary: "#22c55e",
+              secondary: "#64748b"
+            },
+            layout: "default",
+            features: {
+              reviews: true,
+              wishlist: true,
+              compare: true,
+              chat: false
+            }
+          },
+          settings: {
+            cod_enabled: true,
+            tax_enabled: true,
+            invoice_enabled: true,
+            shipping_enabled: true
+          }
         });
 
       if (storeError) {
@@ -69,7 +89,7 @@ const Register = () => {
         description: "سيتم توجيهك إلى لوحة التحكم",
       });
 
-      navigate('/');
+      navigate('/dashboard');
     } catch (error: any) {
       toast({
         title: "خطأ",
