@@ -4,56 +4,97 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
-import { ArrowLeft, ArrowRight, Mail, Lock, Phone, AlertCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, Mail, Lock, Phone, User, Store, CheckCircle2 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { cn } from "@/lib/utils";
 
 const Register = () => {
   const { lang } = useLanguage();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
-  const [phoneError, setPhoneError] = useState("");
+  const [step, setStep] = useState<1 | 2>(1);
   const Arrow = lang === 'ar' ? ArrowLeft : ArrowRight;
 
-  const validateSyrianPhone = (phone: string) => {
-    const syrianPhoneRegex = /^09\d{8}$/;
-    return syrianPhoneRegex.test(phone);
-  };
+  // Form validation schema
+  const formSchema = z.object({
+    email: z.string().email({
+      message: lang === 'ar' ? "يرجى إدخال بريد إلكتروني صحيح" : "Please enter a valid email",
+    }),
+    phone: z.string().regex(/^09\d{8}$/, {
+      message: lang === 'ar' 
+        ? "يجب أن يبدأ رقم الهاتف بـ 09 ويتكون من 10 أرقام" 
+        : "Phone number must start with 09 and be 10 digits long",
+    }),
+    password: z.string().min(8, {
+      message: lang === 'ar' 
+        ? "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل"
+        : "Password must be at least 8 characters long",
+    }),
+    storeName: z.string().min(3, {
+      message: lang === 'ar' 
+        ? "يجب أن يتكون اسم المتجر من 3 أحرف على الأقل"
+        : "Store name must be at least 3 characters long",
+    }),
+    ownerName: z.string().min(3, {
+      message: lang === 'ar' 
+        ? "يجب أن يتكون اسم المالك من 3 أحرف على الأقل"
+        : "Owner name must be at least 3 characters long",
+    }),
+  });
 
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setPhone(value);
-    
-    if (value && !validateSyrianPhone(value)) {
-      setPhoneError(lang === 'ar' 
-        ? "يجب أن يبدأ رقم الهاتف بـ 09 ويتكون من 10 أرقام"
-        : "Phone number must start with 09 and be 10 digits long"
-      );
-    } else {
-      setPhoneError("");
-    }
-  };
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      phone: "",
+      password: "",
+      storeName: "",
+      ownerName: "",
+    },
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validateSyrianPhone(phone)) {
-      toast({
-        variant: "destructive",
-        title: lang === 'ar' ? "خطأ في رقم الهاتف" : "Invalid phone number",
-        description: lang === 'ar' 
-          ? "الرجاء إدخال رقم هاتف سوري صالح يبدأ بـ 09"
-          : "Please enter a valid Syrian phone number starting with 09",
-      });
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    if (step === 1) {
+      setStep(2);
       return;
     }
 
     toast({
-      title: lang === 'ar' ? "جاري المعالجة" : "Processing",
-      description: lang === 'ar' ? "جاري إنشاء حسابك" : "Creating your account",
+      title: lang === 'ar' ? "تم إنشاء الحساب بنجاح" : "Account created successfully",
+      description: lang === 'ar' 
+        ? "سيتم توجيهك إلى لوحة التحكم"
+        : "You will be redirected to the dashboard",
     });
+    console.log(values);
   };
+
+  const steps = [
+    {
+      title: lang === 'ar' ? "معلومات الحساب" : "Account Information",
+      description: lang === 'ar' 
+        ? "أدخل معلومات حسابك الأساسية"
+        : "Enter your basic account information",
+      fields: ['email', 'phone', 'password'],
+    },
+    {
+      title: lang === 'ar' ? "معلومات المتجر" : "Store Information",
+      description: lang === 'ar'
+        ? "أدخل معلومات متجرك"
+        : "Enter your store information",
+      fields: ['storeName', 'ownerName'],
+    },
+  ];
+
+  const currentStep = steps[step - 1];
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-green-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -65,100 +106,204 @@ const Register = () => {
           >
             {lang === 'ar' ? "دكان تك" : "Dukan Tech"}
           </Link>
+          
+          {/* Steps indicator */}
+          <div className="flex justify-center items-center gap-4 mb-6">
+            {steps.map((s, index) => (
+              <div
+                key={index}
+                className="flex items-center"
+              >
+                <div
+                  className={cn(
+                    "w-8 h-8 rounded-full flex items-center justify-center border-2 transition-colors",
+                    step > index + 1 
+                      ? "bg-green-600 border-green-600 text-white"
+                      : step === index + 1
+                      ? "border-green-600 text-green-600"
+                      : "border-gray-300 text-gray-300"
+                  )}
+                >
+                  {step > index + 1 ? (
+                    <CheckCircle2 className="w-5 h-5" />
+                  ) : (
+                    index + 1
+                  )}
+                </div>
+                {index < steps.length - 1 && (
+                  <div
+                    className={cn(
+                      "w-12 h-0.5 mx-2",
+                      step > index + 1 ? "bg-green-600" : "bg-gray-300"
+                    )}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+
           <CardTitle className="text-2xl font-bold">
-            {lang === 'ar' ? "إنشاء حساب جديد" : "Create new account"}
+            {currentStep.title}
           </CardTitle>
           <CardDescription>
-            {lang === 'ar' 
-              ? "قم بإنشاء حساب للوصول إلى جميع الميزات"
-              : "Create an account to access all features"
-            }
+            {currentStep.description}
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium text-gray-700 block">
-                {lang === 'ar' ? "البريد الإلكتروني" : "Email"}
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                <Input
-                  id="email"
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={lang === 'ar' ? "أدخل بريدك الإلكتروني" : "Enter your email"}
-                  className="pl-10"
-                  dir={lang === 'ar' ? "rtl" : "ltr"}
-                />
-              </div>
-            </div>
-            
-            <div className="space-y-2">
-              <label htmlFor="phone" className="text-sm font-medium text-gray-700 block">
-                {lang === 'ar' ? "رقم الهاتف" : "Phone number"}
-              </label>
-              <div className="relative">
-                <Phone className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                <Input
-                  id="phone"
-                  type="tel"
-                  required
-                  value={phone}
-                  onChange={handlePhoneChange}
-                  placeholder={lang === 'ar' ? "أدخل رقم الهاتف (يبدأ بـ 09)" : "Enter phone number (starts with 09)"}
-                  className="pl-10"
-                  dir="ltr"
-                />
-              </div>
-              {phoneError && (
-                <Alert variant="destructive" className="mt-2">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>{phoneError}</AlertDescription>
-                </Alert>
-              )}
-            </div>
 
-            <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium text-gray-700 block">
-                {lang === 'ar' ? "كلمة المرور" : "Password"}
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder={lang === 'ar' ? "أدخل كلمة المرور" : "Enter your password"}
-                  className="pl-10"
-                  dir={lang === 'ar' ? "rtl" : "ltr"}
-                />
-              </div>
-            </div>
-          </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <Button
-              type="submit"
-              className="w-full bg-green-600 hover:bg-green-700"
-            >
-              {lang === 'ar' ? "إنشاء حساب" : "Sign up"}
-              <Arrow className="ml-2 h-5 w-5" />
-            </Button>
-            <p className="text-center text-sm text-gray-600">
-              {lang === 'ar' ? "لديك حساب بالفعل؟" : "Already have an account?"}{" "}
-              <Link
-                to="/login"
-                className="font-medium text-green-600 hover:text-green-500"
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <CardContent className="space-y-4">
+              {step === 1 && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{lang === 'ar' ? "البريد الإلكتروني" : "Email"}</FormLabel>
+                        <div className="relative">
+                          <Mail className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                          <FormControl>
+                            <Input
+                              placeholder={lang === 'ar' ? "أدخل بريدك الإلكتروني" : "Enter your email"}
+                              className="pl-10"
+                              {...field}
+                            />
+                          </FormControl>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{lang === 'ar' ? "رقم الهاتف" : "Phone number"}</FormLabel>
+                        <div className="relative">
+                          <Phone className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                          <FormControl>
+                            <Input
+                              placeholder={lang === 'ar' ? "أدخل رقم الهاتف (يبدأ بـ 09)" : "Enter phone number (starts with 09)"}
+                              className="pl-10"
+                              dir="ltr"
+                              {...field}
+                            />
+                          </FormControl>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{lang === 'ar' ? "كلمة المرور" : "Password"}</FormLabel>
+                        <div className="relative">
+                          <Lock className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                          <FormControl>
+                            <Input
+                              type="password"
+                              placeholder={lang === 'ar' ? "أدخل كلمة المرور" : "Enter your password"}
+                              className="pl-10"
+                              {...field}
+                            />
+                          </FormControl>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              )}
+
+              {step === 2 && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name="storeName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{lang === 'ar' ? "اسم المتجر" : "Store name"}</FormLabel>
+                        <div className="relative">
+                          <Store className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                          <FormControl>
+                            <Input
+                              placeholder={lang === 'ar' ? "أدخل اسم المتجر" : "Enter store name"}
+                              className="pl-10"
+                              {...field}
+                            />
+                          </FormControl>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="ownerName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{lang === 'ar' ? "اسم المالك" : "Owner name"}</FormLabel>
+                        <div className="relative">
+                          <User className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                          <FormControl>
+                            <Input
+                              placeholder={lang === 'ar' ? "أدخل اسم المالك" : "Enter owner name"}
+                              className="pl-10"
+                              {...field}
+                            />
+                          </FormControl>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              )}
+            </CardContent>
+
+            <CardFooter className="flex flex-col space-y-4">
+              <Button
+                type="submit"
+                className="w-full bg-green-600 hover:bg-green-700 transition-all duration-300"
               >
-                {lang === 'ar' ? "سجل دخول" : "Sign in"}
-              </Link>
-            </p>
-          </CardFooter>
-        </form>
+                {step === 1 
+                  ? lang === 'ar' ? "التالي" : "Next"
+                  : lang === 'ar' ? "إنشاء الحساب" : "Create Account"
+                }
+                <Arrow className="ml-2 h-5 w-5" />
+              </Button>
+
+              {step === 2 && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="w-full"
+                  onClick={() => setStep(1)}
+                >
+                  {lang === 'ar' ? "العودة" : "Back"}
+                </Button>
+              )}
+
+              <p className="text-center text-sm text-gray-600">
+                {lang === 'ar' ? "لديك حساب بالفعل؟" : "Already have an account?"}{" "}
+                <Link
+                  to="/login"
+                  className="font-medium text-green-600 hover:text-green-500"
+                >
+                  {lang === 'ar' ? "سجل دخول" : "Sign in"}
+                </Link>
+              </p>
+            </CardFooter>
+          </form>
+        </Form>
       </Card>
     </div>
   );
