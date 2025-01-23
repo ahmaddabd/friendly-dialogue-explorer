@@ -5,6 +5,7 @@ import { useLanguage } from "@/components/LanguageSwitcher";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Mail, Lock, Store, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const emailFormSchema = z.object({
   email: z.string().email(),
@@ -18,9 +19,10 @@ type EmailFormData = z.infer<typeof emailFormSchema>;
 interface EmailRegistrationFormProps {
   onSubmit: (data: EmailFormData) => void;
   step: 1 | 2;
+  loading?: boolean;
 }
 
-export const EmailRegistrationForm = ({ onSubmit, step }: EmailRegistrationFormProps) => {
+export const EmailRegistrationForm = ({ onSubmit, step, loading }: EmailRegistrationFormProps) => {
   const { lang } = useLanguage();
   
   const form = useForm<EmailFormData>({
@@ -80,6 +82,17 @@ export const EmailRegistrationForm = ({ onSubmit, step }: EmailRegistrationFormP
                 </FormItem>
               )}
             />
+
+            <Button 
+              type="submit"
+              className="w-full bg-green-600 hover:bg-green-700"
+              disabled={loading}
+            >
+              {loading 
+                ? (lang === 'ar' ? "جاري المعالجة..." : "Processing...")
+                : (lang === 'ar' ? "التالي" : "Next")
+              }
+            </Button>
           </>
         )}
 
@@ -126,6 +139,17 @@ export const EmailRegistrationForm = ({ onSubmit, step }: EmailRegistrationFormP
                 </FormItem>
               )}
             />
+
+            <Button 
+              type="submit"
+              className="w-full bg-green-600 hover:bg-green-700"
+              disabled={loading}
+            >
+              {loading 
+                ? (lang === 'ar' ? "جاري المعالجة..." : "Processing...")
+                : (lang === 'ar' ? "إنشاء الحساب" : "Create Account")
+              }
+            </Button>
           </>
         )}
       </form>
