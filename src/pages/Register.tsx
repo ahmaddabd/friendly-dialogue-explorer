@@ -11,7 +11,10 @@ const Register = () => {
   const [formData, setFormData] = useState<any>(null);
 
   const handleSubmit = async (values: any) => {
+    console.log("Form submitted with values:", values);
+    
     if (step === 1) {
+      console.log("Step 1: Moving to step 2");
       // Store form data and move to next step
       setFormData(values);
       setStep(2);
@@ -23,9 +26,13 @@ const Register = () => {
       ...formData,
       ...values
     };
+    
+    console.log("Step 2: Submitting final data:", finalData);
 
     setLoading(true);
     try {
+      console.log("Attempting to register user with email:", finalData.email);
+      
       // Register the user
       const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email: finalData.email,
@@ -38,6 +45,8 @@ const Register = () => {
       });
 
       if (signUpError) {
+        console.error("Registration error:", signUpError);
+        
         if (signUpError.message.includes("User already registered")) {
           toast({
             title: "خطأ في التسجيل",
@@ -53,6 +62,8 @@ const Register = () => {
         }
         return;
       }
+
+      console.log("User registered successfully:", signUpData);
 
       // Create the store
       const { error: storeError } = await supabase
@@ -85,6 +96,7 @@ const Register = () => {
         });
 
       if (storeError) {
+        console.error("Store creation error:", storeError);
         toast({
           title: "خطأ",
           description: "حدث خطأ أثناء إنشاء المتجر",
@@ -93,6 +105,8 @@ const Register = () => {
         return;
       }
 
+      console.log("Store created successfully");
+      
       toast({
         title: "تم إنشاء الحساب بنجاح",
         description: "سيتم توجيهك إلى لوحة التحكم",
@@ -101,6 +115,7 @@ const Register = () => {
       // Redirect to dashboard
       navigate('/dashboard');
     } catch (error: any) {
+      console.error("Unexpected error:", error);
       toast({
         title: "خطأ",
         description: error.message,

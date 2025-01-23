@@ -8,10 +8,10 @@ import { Mail, Lock, Store, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const emailFormSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-  storeName: z.string().min(3),
-  ownerName: z.string().min(3),
+  email: z.string().email("البريد الإلكتروني غير صالح"),
+  password: z.string().min(8, "كلمة المرور يجب أن تكون 8 أحرف على الأقل"),
+  storeName: z.string().min(3, "اسم المتجر يجب أن يكون 3 أحرف على الأقل"),
+  ownerName: z.string().min(3, "اسم المالك يجب أن يكون 3 أحرف على الأقل"),
 });
 
 type EmailFormData = z.infer<typeof emailFormSchema>;
@@ -35,9 +35,14 @@ export const EmailRegistrationForm = ({ onSubmit, step, loading }: EmailRegistra
     },
   });
 
+  const handleSubmit = (data: EmailFormData) => {
+    console.log("EmailRegistrationForm - Form submitted with data:", data);
+    onSubmit(data);
+  };
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
         {step === 1 && (
           <>
             <FormField
