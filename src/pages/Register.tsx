@@ -42,13 +42,12 @@ const Register = () => {
       // Create the store
       const { error: storeError } = await supabase
         .from('stores')
-        .insert([
-          {
-            name: values.storeName,
-            owner_id: (await supabase.auth.getUser()).data.user?.id,
-            status: 'pending'
-          }
-        ]);
+        .insert({
+          name: values.storeName,
+          owner_id: (await supabase.auth.getUser()).data.user?.id,
+          category: 'general', // Adding required category field
+          status: 'pending'
+        });
 
       if (storeError) throw storeError;
 
