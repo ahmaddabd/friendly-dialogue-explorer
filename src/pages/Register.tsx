@@ -18,17 +18,37 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@/lib/utils";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Register = () => {
   const { lang } = useLanguage();
   const [step, setStep] = useState<1 | 2>(1);
   const Arrow = lang === 'ar' ? ArrowLeft : ArrowRight;
 
-  // Form validation schema
-  const formSchema = z.object({
+  // تعريف مخطط التحقق للبريد الإلكتروني
+  const emailFormSchema = z.object({
     email: z.string().email({
       message: lang === 'ar' ? "يرجى إدخال بريد إلكتروني صحيح" : "Please enter a valid email",
     }),
+    password: z.string().min(8, {
+      message: lang === 'ar' 
+        ? "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل"
+        : "Password must be at least 8 characters long",
+    }),
+    storeName: z.string().min(3, {
+      message: lang === 'ar' 
+        ? "يجب أن يتكون اسم المتجر من 3 أحرف على الأقل"
+        : "Store name must be at least 3 characters long",
+    }),
+    ownerName: z.string().min(3, {
+      message: lang === 'ar' 
+        ? "يجب أن يتكون اسم المالك من 3 أحرف على الأقل"
+        : "Owner name must be at least 3 characters long",
+    }),
+  });
+
+  // تعريف مخطط التحقق لرقم الهاتف
+  const phoneFormSchema = z.object({
     phone: z.string().regex(/^09\d{8}$/, {
       message: lang === 'ar' 
         ? "يجب أن يبدأ رقم الهاتف بـ 09 ويتكون من 10 أرقام" 
@@ -51,10 +71,19 @@ const Register = () => {
     }),
   });
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const emailForm = useForm<z.infer<typeof emailFormSchema>>({
+    resolver: zodResolver(emailFormSchema),
     defaultValues: {
       email: "",
+      password: "",
+      storeName: "",
+      ownerName: "",
+    },
+  });
+
+  const phoneForm = useForm<z.infer<typeof phoneFormSchema>>({
+    resolver: zodResolver(phoneFormSchema),
+    defaultValues: {
       phone: "",
       password: "",
       storeName: "",
@@ -62,7 +91,7 @@ const Register = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = (values: any) => {
     if (step === 1) {
       setStep(2);
       return;
@@ -83,14 +112,12 @@ const Register = () => {
       description: lang === 'ar' 
         ? "أدخل معلومات حسابك الأساسية"
         : "Enter your basic account information",
-      fields: ['email', 'phone', 'password'],
     },
     {
       title: lang === 'ar' ? "معلومات المتجر" : "Store Information",
       description: lang === 'ar'
         ? "أدخل معلومات متجرك"
         : "Enter your store information",
-      fields: ['storeName', 'ownerName'],
     },
   ];
 
@@ -107,7 +134,6 @@ const Register = () => {
             {lang === 'ar' ? "دكان تك" : "Dukan Tech"}
           </Link>
           
-          {/* Steps indicator */}
           <div className="flex justify-center items-center gap-4 mb-6">
             {steps.map((s, index) => (
               <div
@@ -150,160 +176,287 @@ const Register = () => {
           </CardDescription>
         </CardHeader>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <CardContent className="space-y-4">
-              {step === 1 && (
-                <>
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{lang === 'ar' ? "البريد الإلكتروني" : "Email"}</FormLabel>
-                        <div className="relative">
-                          <Mail className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                          <FormControl>
-                            <Input
-                              placeholder={lang === 'ar' ? "أدخل بريدك الإلكتروني" : "Enter your email"}
-                              className="pl-10"
-                              {...field}
-                            />
-                          </FormControl>
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+        <Tabs defaultValue="phone" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="phone">
+              {lang === 'ar' ? "رقم الهاتف" : "Phone"}
+            </TabsTrigger>
+            <TabsTrigger value="email">
+              {lang === 'ar' ? "البريد الإلكتروني" : "Email"}
+            </TabsTrigger>
+          </TabsList>
 
-                  <FormField
-                    control={form.control}
-                    name="phone"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{lang === 'ar' ? "رقم الهاتف" : "Phone number"}</FormLabel>
-                        <div className="relative">
-                          <Phone className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                          <FormControl>
-                            <Input
-                              placeholder={lang === 'ar' ? "أدخل رقم الهاتف (يبدأ بـ 09)" : "Enter phone number (starts with 09)"}
-                              className="pl-10"
-                              dir="ltr"
-                              {...field}
-                            />
-                          </FormControl>
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+          <TabsContent value="phone">
+            <Form {...phoneForm}>
+              <form onSubmit={phoneForm.handleSubmit(onSubmit)} className="space-y-6">
+                <CardContent className="space-y-4">
+                  {step === 1 && (
+                    <>
+                      <FormField
+                        control={phoneForm.control}
+                        name="phone"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{lang === 'ar' ? "رقم الهاتف" : "Phone number"}</FormLabel>
+                            <div className="relative">
+                              <Phone className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                              <FormControl>
+                                <Input
+                                  placeholder={lang === 'ar' ? "أدخل رقم الهاتف (يبدأ بـ 09)" : "Enter phone number (starts with 09)"}
+                                  className="pl-10"
+                                  dir="ltr"
+                                  {...field}
+                                />
+                              </FormControl>
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{lang === 'ar' ? "كلمة المرور" : "Password"}</FormLabel>
-                        <div className="relative">
-                          <Lock className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                          <FormControl>
-                            <Input
-                              type="password"
-                              placeholder={lang === 'ar' ? "أدخل كلمة المرور" : "Enter your password"}
-                              className="pl-10"
-                              {...field}
-                            />
-                          </FormControl>
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </>
-              )}
+                      <FormField
+                        control={phoneForm.control}
+                        name="password"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{lang === 'ar' ? "كلمة المرور" : "Password"}</FormLabel>
+                            <div className="relative">
+                              <Lock className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                              <FormControl>
+                                <Input
+                                  type="password"
+                                  placeholder={lang === 'ar' ? "أدخل كلمة المرور" : "Enter your password"}
+                                  className="pl-10"
+                                  {...field}
+                                />
+                              </FormControl>
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </>
+                  )}
 
-              {step === 2 && (
-                <>
-                  <FormField
-                    control={form.control}
-                    name="storeName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{lang === 'ar' ? "اسم المتجر" : "Store name"}</FormLabel>
-                        <div className="relative">
-                          <Store className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                          <FormControl>
-                            <Input
-                              placeholder={lang === 'ar' ? "أدخل اسم المتجر" : "Enter store name"}
-                              className="pl-10"
-                              {...field}
-                            />
-                          </FormControl>
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  {step === 2 && (
+                    <>
+                      <FormField
+                        control={phoneForm.control}
+                        name="storeName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{lang === 'ar' ? "اسم المتجر" : "Store name"}</FormLabel>
+                            <div className="relative">
+                              <Store className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                              <FormControl>
+                                <Input
+                                  placeholder={lang === 'ar' ? "أدخل اسم المتجر" : "Enter store name"}
+                                  className="pl-10"
+                                  {...field}
+                                />
+                              </FormControl>
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                  <FormField
-                    control={form.control}
-                    name="ownerName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{lang === 'ar' ? "اسم المالك" : "Owner name"}</FormLabel>
-                        <div className="relative">
-                          <User className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                          <FormControl>
-                            <Input
-                              placeholder={lang === 'ar' ? "أدخل اسم المالك" : "Enter owner name"}
-                              className="pl-10"
-                              {...field}
-                            />
-                          </FormControl>
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </>
-              )}
-            </CardContent>
+                      <FormField
+                        control={phoneForm.control}
+                        name="ownerName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{lang === 'ar' ? "اسم المالك" : "Owner name"}</FormLabel>
+                            <div className="relative">
+                              <User className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                              <FormControl>
+                                <Input
+                                  placeholder={lang === 'ar' ? "أدخل اسم المالك" : "Enter owner name"}
+                                  className="pl-10"
+                                  {...field}
+                                />
+                              </FormControl>
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </>
+                  )}
+                </CardContent>
 
-            <CardFooter className="flex flex-col space-y-4">
-              <Button
-                type="submit"
-                className="w-full bg-green-600 hover:bg-green-700 transition-all duration-300"
-              >
-                {step === 1 
-                  ? lang === 'ar' ? "التالي" : "Next"
-                  : lang === 'ar' ? "إنشاء الحساب" : "Create Account"
-                }
-                <Arrow className="ml-2 h-5 w-5" />
-              </Button>
+                <CardFooter className="flex flex-col space-y-4">
+                  <Button
+                    type="submit"
+                    className="w-full bg-green-600 hover:bg-green-700 transition-all duration-300"
+                  >
+                    {step === 1 
+                      ? lang === 'ar' ? "التالي" : "Next"
+                      : lang === 'ar' ? "إنشاء الحساب" : "Create Account"
+                    }
+                    <Arrow className="ml-2 h-5 w-5" />
+                  </Button>
 
-              {step === 2 && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="w-full"
-                  onClick={() => setStep(1)}
-                >
-                  {lang === 'ar' ? "العودة" : "Back"}
-                </Button>
-              )}
+                  {step === 2 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      className="w-full"
+                      onClick={() => setStep(1)}
+                    >
+                      {lang === 'ar' ? "العودة" : "Back"}
+                    </Button>
+                  )}
 
-              <p className="text-center text-sm text-gray-600">
-                {lang === 'ar' ? "لديك حساب بالفعل؟" : "Already have an account?"}{" "}
-                <Link
-                  to="/login"
-                  className="font-medium text-green-600 hover:text-green-500"
-                >
-                  {lang === 'ar' ? "سجل دخول" : "Sign in"}
-                </Link>
-              </p>
-            </CardFooter>
-          </form>
-        </Form>
+                  <p className="text-center text-sm text-gray-600">
+                    {lang === 'ar' ? "لديك حساب بالفعل؟" : "Already have an account?"}{" "}
+                    <Link
+                      to="/login"
+                      className="font-medium text-green-600 hover:text-green-500"
+                    >
+                      {lang === 'ar' ? "سجل دخول" : "Sign in"}
+                    </Link>
+                  </p>
+                </CardFooter>
+              </form>
+            </Form>
+          </TabsContent>
+
+          <TabsContent value="email">
+            <Form {...emailForm}>
+              <form onSubmit={emailForm.handleSubmit(onSubmit)} className="space-y-6">
+                <CardContent className="space-y-4">
+                  {step === 1 && (
+                    <>
+                      <FormField
+                        control={emailForm.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{lang === 'ar' ? "البريد الإلكتروني" : "Email"}</FormLabel>
+                            <div className="relative">
+                              <Mail className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                              <FormControl>
+                                <Input
+                                  placeholder={lang === 'ar' ? "أدخل بريدك الإلكتروني" : "Enter your email"}
+                                  className="pl-10"
+                                  {...field}
+                                />
+                              </FormControl>
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={emailForm.control}
+                        name="password"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{lang === 'ar' ? "كلمة المرور" : "Password"}</FormLabel>
+                            <div className="relative">
+                              <Lock className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                              <FormControl>
+                                <Input
+                                  type="password"
+                                  placeholder={lang === 'ar' ? "أدخل كلمة المرور" : "Enter your password"}
+                                  className="pl-10"
+                                  {...field}
+                                />
+                              </FormControl>
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </>
+                  )}
+
+                  {step === 2 && (
+                    <>
+                      <FormField
+                        control={emailForm.control}
+                        name="storeName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{lang === 'ar' ? "اسم المتجر" : "Store name"}</FormLabel>
+                            <div className="relative">
+                              <Store className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                              <FormControl>
+                                <Input
+                                  placeholder={lang === 'ar' ? "أدخل اسم المتجر" : "Enter store name"}
+                                  className="pl-10"
+                                  {...field}
+                                />
+                              </FormControl>
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={emailForm.control}
+                        name="ownerName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{lang === 'ar' ? "اسم المالك" : "Owner name"}</FormLabel>
+                            <div className="relative">
+                              <User className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                              <FormControl>
+                                <Input
+                                  placeholder={lang === 'ar' ? "أدخل اسم المالك" : "Enter owner name"}
+                                  className="pl-10"
+                                  {...field}
+                                />
+                              </FormControl>
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </>
+                  )}
+                </CardContent>
+
+                <CardFooter className="flex flex-col space-y-4">
+                  <Button
+                    type="submit"
+                    className="w-full bg-green-600 hover:bg-green-700 transition-all duration-300"
+                  >
+                    {step === 1 
+                      ? lang === 'ar' ? "التالي" : "Next"
+                      : lang === 'ar' ? "إنشاء الحساب" : "Create Account"
+                    }
+                    <Arrow className="ml-2 h-5 w-5" />
+                  </Button>
+
+                  {step === 2 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      className="w-full"
+                      onClick={() => setStep(1)}
+                    >
+                      {lang === 'ar' ? "العودة" : "Back"}
+                    </Button>
+                  )}
+
+                  <p className="text-center text-sm text-gray-600">
+                    {lang === 'ar' ? "لديك حساب بالفعل؟" : "Already have an account?"}{" "}
+                    <Link
+                      to="/login"
+                      className="font-medium text-green-600 hover:text-green-500"
+                    >
+                      {lang === 'ar' ? "سجل دخول" : "Sign in"}
+                    </Link>
+                  </p>
+                </CardFooter>
+              </form>
+            </Form>
+          </TabsContent>
+        </Tabs>
       </Card>
     </div>
   );
