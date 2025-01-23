@@ -13,6 +13,11 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 const Index = lazy(() => import("./pages/Index"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
+const Dashboard = lazy(() => import("./pages/dashboard/Index"));
+const Products = lazy(() => import("./pages/dashboard/Products"));
+const Orders = lazy(() => import("./pages/dashboard/Orders"));
+const Settings = lazy(() => import("./pages/dashboard/Settings"));
+const Analytics = lazy(() => import("./pages/dashboard/Analytics"));
 const CreateStore = lazy(() => import("./pages/store/CreateStore"));
 
 // Configure QueryClient with performance optimizations
@@ -55,6 +60,11 @@ const App = () => {
                     <Route path="/" element={<Index />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/dashboard/products" element={<Products />} />
+                    <Route path="/dashboard/orders" element={<Orders />} />
+                    <Route path="/dashboard/settings" element={<Settings />} />
+                    <Route path="/dashboard/analytics" element={<Analytics />} />
                     <Route path="/store/create" element={<CreateStore />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                   </Routes>
