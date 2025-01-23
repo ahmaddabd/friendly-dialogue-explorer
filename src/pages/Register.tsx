@@ -32,7 +32,7 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-green-50 py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md shadow-lg border-green-100">
         <CardHeader className="space-y-2 text-center">
           <Link 
             to="/" 
@@ -43,13 +43,13 @@ const Register = () => {
           
           <RegistrationSteps currentStep={step} />
 
-          <CardTitle className="text-2xl font-bold">
+          <CardTitle className="text-2xl font-bold text-gray-800">
             {step === 1 
               ? (lang === 'ar' ? "إنشاء حساب جديد" : "Create New Account")
               : (lang === 'ar' ? "معلومات المتجر" : "Store Information")
             }
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-gray-600">
             {step === 1
               ? (lang === 'ar' ? "قم بإدخال معلومات حسابك" : "Enter your account information")
               : (lang === 'ar' ? "قم بإدخال معلومات متجرك" : "Enter your store information")
@@ -57,43 +57,51 @@ const Register = () => {
           </CardDescription>
         </CardHeader>
 
-        <Tabs defaultValue="phone" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="phone">
-              {lang === 'ar' ? "رقم الهاتف" : "Phone"}
-            </TabsTrigger>
-            <TabsTrigger value="email">
-              {lang === 'ar' ? "البريد الإلكتروني" : "Email"}
-            </TabsTrigger>
-          </TabsList>
+        <CardContent className="p-6">
+          <Tabs defaultValue="phone" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger 
+                value="phone"
+                className="data-[state=active]:bg-green-600 data-[state=active]:text-white"
+              >
+                {lang === 'ar' ? "رقم الهاتف" : "Phone"}
+              </TabsTrigger>
+              <TabsTrigger 
+                value="email"
+                className="data-[state=active]:bg-green-600 data-[state=active]:text-white"
+              >
+                {lang === 'ar' ? "البريد الإلكتروني" : "Email"}
+              </TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="phone">
-            <PhoneRegistrationForm onSubmit={handleSubmit} step={step} />
-          </TabsContent>
+            <TabsContent value="phone">
+              <PhoneRegistrationForm onSubmit={handleSubmit} step={step} />
+            </TabsContent>
 
-          <TabsContent value="email">
-            <EmailRegistrationForm onSubmit={handleSubmit} step={step} />
-          </TabsContent>
-        </Tabs>
+            <TabsContent value="email">
+              <EmailRegistrationForm onSubmit={handleSubmit} step={step} />
+            </TabsContent>
+          </Tabs>
+        </CardContent>
 
-        <CardFooter className="flex flex-col space-y-4">
+        <CardFooter className="flex flex-col space-y-4 p-6 bg-gray-50 rounded-b-lg">
           <Button
             type="submit"
             form="registration-form"
-            className="w-full bg-green-600 hover:bg-green-700 transition-all duration-300"
+            className="w-full bg-green-600 hover:bg-green-700 transition-all duration-300 text-white font-medium"
           >
             {step === 1 
               ? lang === 'ar' ? "التالي" : "Next"
               : lang === 'ar' ? "إنشاء الحساب" : "Create Account"
             }
-            <Arrow className="ml-2 h-5 w-5" />
+            <Arrow className="rtl:mr-2 ltr:ml-2 h-5 w-5" />
           </Button>
 
           {step === 2 && (
             <Button
               type="button"
               variant="ghost"
-              className="w-full"
+              className="w-full hover:bg-green-50 hover:text-green-600"
               onClick={() => setStep(1)}
             >
               {lang === 'ar' ? "العودة" : "Back"}
