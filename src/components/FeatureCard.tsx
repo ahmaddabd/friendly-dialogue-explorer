@@ -26,11 +26,24 @@ export const FeatureCard = ({
   const IconComponent = icons[icon];
 
   return (
-    <div className="p-6 bg-green-50 rounded-lg hover:bg-green-100 transition-colors duration-300 transform hover:-translate-y-1 hover:shadow-md">
-      <IconComponent className="w-8 h-8 text-green-700 mx-auto mb-3" />
-      <h3 className="font-semibold text-green-800 mb-2">{titleAr}</h3>
-      <h3 className="font-semibold text-green-800 mb-2">{titleEn}</h3>
-      <p className="text-gray-600">{descriptionAr}</p>
-    </div>
+    <Card className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden">
+      <div className="p-6 relative">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-green-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-500" />
+        
+        <div className="relative">
+          <IconComponent className="w-12 h-12 text-green-600 mb-6 transform transition-transform group-hover:scale-110 duration-300" />
+          
+          <h3 className="text-xl font-bold text-green-800 mb-2">
+            <span className="block font-arabic mb-1">{titleAr}</span>
+            <span className="block text-lg text-gray-600">{titleEn}</span>
+          </h3>
+          
+          <p className="text-gray-600">
+            <span className="block font-arabic mb-1">{descriptionAr}</span>
+            <span className="block text-sm text-gray-500">{descriptionEn}</span>
+          </p>
+        </div>
+      </div>
+    </Card>
   );
 };

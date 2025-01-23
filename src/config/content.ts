@@ -5,12 +5,12 @@ export const content = {
       en: "Dikantek"
     },
     subtitle: {
-      ar: "منصتك لإدارة المتجر الرقمي",
-      en: "Your Digital Store Management Platform"
+      ar: "منصتك المتكاملة لإدارة المتجر الرقمي",
+      en: "Your Complete Digital Store Management Platform"
     },
     description: {
-      ar: "منصة موثوقة لإدارة متجرك بكفاءة عالية",
-      en: "A trusted platform for efficient store management"
+      ar: "نقدم لك حلولاً متكاملة لإدارة متجرك بكفاءة عالية وأمان تام",
+      en: "We provide comprehensive solutions for efficient and secure store management"
     }
   },
   features: [
@@ -21,30 +21,30 @@ export const content = {
         en: "All Store Types"
       },
       description: {
-        ar: "تجارية، صناعية، خدمية",
-        en: "Commercial, Industrial, Services"
+        ar: "ندعم المتاجر التجارية والصناعية والخدمية",
+        en: "Supporting commercial, industrial, and service stores"
       }
     },
     {
       icon: "ShieldCheck",
       title: {
-        ar: "سوق موثوق",
-        en: "Trusted Market"
+        ar: "حماية وأمان",
+        en: "Security & Safety"
       },
       description: {
-        ar: "متاجر موثقة رسمياً",
-        en: "Officially Verified Stores"
+        ar: "متاجر موثقة رسمياً مع حماية كاملة",
+        en: "Officially verified stores with complete protection"
       }
     },
     {
       icon: "MapPin",
       title: {
-        ar: "متوفر في دمشق",
-        en: "Available in Damascus"
+        ar: "تغطية واسعة",
+        en: "Wide Coverage"
       },
       description: {
-        ar: "قريباً في جميع أنحاء سوريا",
-        en: "Coming soon across Syria"
+        ar: "متوفر في دمشق وقريباً في جميع المحافظات",
+        en: "Available in Damascus, expanding to all governorates"
       }
     }
   ]
