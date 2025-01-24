@@ -1,14 +1,33 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/hooks/useLanguage";
-import { EmailForm } from "./EmailForm";
-import { StoreForm } from "./StoreForm";
+import { EmailForm } from "./forms/EmailForm";
+import { StoreForm } from "./forms/StoreForm";
 import { RegistrationSteps } from "./RegistrationSteps";
-import { useRegistration } from "../hooks/useRegistration";
+import { useAuthStep } from "../hooks/useAuthStep";
+import { useStoreStep } from "../hooks/useStoreStep";
+import { useState } from "react";
 
 export const RegistrationCard = () => {
   const { lang } = useLanguage();
-  const { step, loading, handleEmailStep, handleStoreStep, handleBack } = useRegistration();
+  const { handleEmailStep, loading: emailLoading } = useAuthStep();
+  const { handleStoreStep, loading: storeLoading } = useStoreStep();
+  const [step, setStep] = useState<1 | 2>(1);
+  const [formData, setFormData] = useState<any>(null);
+
+  const handleEmailSubmit = async (data: any) => {
+    const result = await handleEmailStep(data);
+    if (result) {
+      setFormData(result);
+      setStep(2);
+    }
+  };
+
+  const handleStoreSubmit = async (data: any) => {
+    await handleStoreStep(data, formData);
+  };
+
+  const handleBack = () => setStep(1);
 
   return (
     <Card className="w-full max-w-md shadow-xl border border-green-100/20">
@@ -38,12 +57,12 @@ export const RegistrationCard = () => {
 
       <CardContent className="p-6">
         {step === 1 ? (
-          <EmailForm onSubmit={handleEmailStep} loading={loading} />
+          <EmailForm onSubmit={handleEmailSubmit} loading={emailLoading} />
         ) : (
           <StoreForm 
-            onSubmit={handleStoreStep} 
+            onSubmit={handleStoreSubmit} 
             onBack={handleBack}
-            loading={loading}
+            loading={storeLoading}
           />
         )}
       </CardContent>
