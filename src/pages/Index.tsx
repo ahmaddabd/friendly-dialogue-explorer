@@ -13,19 +13,19 @@ import { motion } from "framer-motion";
 const Index = () => {
   return (
     <MainLayout>
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50/50 animate-gradient-x relative overflow-hidden">
-        {/* Decorative background elements */}
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50/50 animate-gradient-x relative overflow-hidden">
+        {/* Background decorative elements */}
         <div className="absolute inset-0 -z-10">
-          <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob" />
-          <div className="absolute top-0 -right-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000" />
-          <div className="absolute -bottom-8 left-20 w-72 h-72 bg-purple-100 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000" />
+          <div className="absolute top-0 -left-4 w-72 h-72 bg-green-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob" />
+          <div className="absolute top-0 -right-4 w-72 h-72 bg-green-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000" />
+          <div className="absolute -bottom-8 left-20 w-72 h-72 bg-green-100 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000" />
         </div>
 
         <div className="relative z-10">
           <Suspense 
             fallback={
               <div className="pt-32 px-4">
-                <Skeleton className="h-[400px] w-full max-w-4xl mx-auto rounded-2xl animate-pulse bg-purple-100/20" />
+                <Skeleton className="h-[400px] w-full max-w-4xl mx-auto rounded-2xl animate-pulse bg-green-100/20" />
               </div>
             }
           >
@@ -37,7 +37,7 @@ const Index = () => {
               <div className="py-20 px-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
                   {[1, 2, 3].map((i) => (
-                    <Skeleton key={i} className="h-40 rounded-xl animate-pulse bg-purple-100/20" />
+                    <Skeleton key={i} className="h-40 rounded-xl animate-pulse bg-green-100/20" />
                   ))}
                 </div>
               </div>
@@ -49,7 +49,7 @@ const Index = () => {
           <Suspense 
             fallback={
               <div className="py-20 px-4">
-                <Skeleton className="h-[600px] w-full max-w-6xl mx-auto rounded-2xl animate-pulse bg-purple-100/20" />
+                <Skeleton className="h-[600px] w-full max-w-6xl mx-auto rounded-2xl animate-pulse bg-green-100/20" />
               </div>
             }
           >
@@ -61,7 +61,7 @@ const Index = () => {
               <div className="py-20 px-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                   {[1, 2, 3].map((i) => (
-                    <Skeleton key={i} className="h-64 rounded-xl animate-pulse bg-purple-100/20" />
+                    <Skeleton key={i} className="h-64 rounded-xl animate-pulse bg-green-100/20" />
                   ))}
                 </div>
               </div>
@@ -75,7 +75,7 @@ const Index = () => {
               <div className="py-20 px-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                   {[1, 2, 3].map((i) => (
-                    <Skeleton key={i} className="h-64 rounded-xl animate-pulse bg-purple-100/20" />
+                    <Skeleton key={i} className="h-64 rounded-xl animate-pulse bg-green-100/20" />
                   ))}
                 </div>
               </div>
@@ -87,7 +87,7 @@ const Index = () => {
           <Suspense 
             fallback={
               <div className="py-20 px-4">
-                <Skeleton className="h-[400px] w-full max-w-4xl mx-auto rounded-2xl animate-pulse bg-purple-100/20" />
+                <Skeleton className="h-[400px] w-full max-w-4xl mx-auto rounded-2xl animate-pulse bg-green-100/20" />
               </div>
             }
           >
