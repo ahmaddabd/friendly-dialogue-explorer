@@ -8,6 +8,8 @@ import {
   BarChart3,
   LogOut,
   Store,
+  ChevronRight,
+  ChevronLeft,
 } from "lucide-react";
 import {
   Sidebar,
@@ -20,10 +22,14 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export function DashboardSidebar() {
   const { lang } = useLanguage();
+  const { toggleSidebar, state } = useSidebar();
 
   const menuItems = [
     {
@@ -55,19 +61,35 @@ export function DashboardSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader className="p-4">
+      <SidebarHeader className="relative border-b border-sidebar-border/50 p-4">
         <Link 
           to="/" 
-          className="flex items-center gap-2 text-xl font-bold text-green-600 hover:text-green-700 transition-colors"
+          className="flex items-center gap-2 text-xl font-bold text-primary transition-colors hover:text-primary/90"
         >
           <Store className="h-6 w-6" />
-          {lang === 'ar' ? "دكان تك" : "Dukan Tech"}
+          <span className={cn("transition-opacity duration-200", 
+            state === "collapsed" && "opacity-0"
+          )}>
+            {lang === 'ar' ? "دكان تك" : "Dukan Tech"}
+          </span>
         </Link>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+          onClick={toggleSidebar}
+        >
+          {state === "collapsed" ? (
+            <ChevronRight className="h-4 w-4" />
+          ) : (
+            <ChevronLeft className="h-4 w-4" />
+          )}
+        </Button>
       </SidebarHeader>
       
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>
+          <SidebarGroupLabel className="px-2 py-4 text-xs font-semibold">
             {lang === 'ar' ? "القائمة الرئيسية" : "Main Menu"}
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -76,11 +98,17 @@ export function DashboardSidebar() {
                 <SidebarMenuItem key={item.path}>
                   <SidebarMenuButton
                     asChild
-                    tooltip={item.title}
+                    tooltip={state === "collapsed" ? item.title : undefined}
+                    className="group flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
                   >
-                    <Link to={item.path} className="flex items-center gap-2">
+                    <Link to={item.path} className="flex w-full items-center gap-3">
                       <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
+                      <span className={cn(
+                        "text-sm font-medium transition-opacity duration-200",
+                        state === "collapsed" && "opacity-0"
+                      )}>
+                        {item.title}
+                      </span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -90,18 +118,23 @@ export function DashboardSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4">
+      <SidebarFooter className="border-t border-sidebar-border/50 p-4">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
               variant="outline"
-              className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
-              tooltip={lang === 'ar' ? "تسجيل الخروج" : "Logout"}
+              className="w-full justify-start text-destructive hover:bg-destructive/10"
+              tooltip={state === "collapsed" ? (lang === 'ar' ? "تسجيل الخروج" : "Logout") : undefined}
             >
-              <button className="flex items-center gap-2">
+              <button className="flex items-center gap-3">
                 <LogOut className="h-4 w-4" />
-                <span>{lang === 'ar' ? "تسجيل الخروج" : "Logout"}</span>
+                <span className={cn(
+                  "text-sm font-medium transition-opacity duration-200",
+                  state === "collapsed" && "opacity-0"
+                )}>
+                  {lang === 'ar' ? "تسجيل الخروج" : "Logout"}
+                </span>
               </button>
             </SidebarMenuButton>
           </SidebarMenuItem>
