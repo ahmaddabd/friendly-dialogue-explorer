@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, CheckCircle2, Sparkles, Store, ShoppingBag, Rocket, Building2, Users, CreditCard } from "lucide-react";
 import { useLanguage } from '@/components/LanguageSwitcher';
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 export const Hero = () => {
   const { lang } = useLanguage();
@@ -9,32 +10,32 @@ export const Hero = () => {
 
   const features = [
     {
-      icon: Building2,
+      icon: Store,
       titleAr: "متجر احترافي",
       titleEn: "Professional Store",
       descriptionAr: "ابدأ متجرك الإلكتروني في دقائق",
       descriptionEn: "Start your online store in minutes"
     },
     {
-      icon: Users,
-      titleAr: "تجربة عملاء مميزة",
-      titleEn: "Great Customer Experience",
-      descriptionAr: "واجهة سهلة الاستخدام لعملائك",
-      descriptionEn: "User-friendly interface for your customers"
+      icon: ShoppingBag,
+      titleAr: "إدارة المبيعات",
+      titleEn: "Sales Management",
+      descriptionAr: "تتبع وإدارة مبيعاتك بسهولة",
+      descriptionEn: "Track and manage your sales easily"
     },
     {
-      icon: CreditCard,
-      titleAr: "حلول دفع متكاملة",
-      titleEn: "Integrated Payment Solutions",
-      descriptionAr: "طرق دفع متعددة وآمنة",
-      descriptionEn: "Multiple secure payment methods"
+      icon: Rocket,
+      titleAr: "نمو سريع",
+      titleEn: "Fast Growth",
+      descriptionAr: "أدوات تسويقية متكاملة لنمو متجرك",
+      descriptionEn: "Integrated marketing tools for growth"
     }
   ];
 
   return (
     <section className="pt-32 pb-20 relative overflow-hidden">
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 via-white to-green-50/50" />
+      <div className="absolute inset-0 bg-gradient-to-br from-green-50 via-white to-green-50" />
       
       {/* Decorative elements */}
       <div className="absolute inset-0">
@@ -46,45 +47,65 @@ export const Hero = () => {
       <div className="container mx-auto px-4 relative">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           {/* Badge */}
-          <div className="inline-block animate-fade-in">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-block"
+          >
             <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-green-100 text-green-800 hover:bg-green-200 transition-colors duration-300">
               <Sparkles className="w-4 h-4 mr-2" />
               {lang === 'ar' ? "متاح الآن في سوريا" : "Now available in Syria"}
               <CheckCircle2 className="w-4 h-4 ml-2" />
             </span>
-          </div>
+          </motion.div>
           
           {/* Main heading */}
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 animate-fade-in leading-tight" style={{ animationDelay: "200ms" }}>
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-4xl md:text-6xl font-bold text-gray-900 leading-tight"
+          >
             <span className="block mb-4 bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-green-800">
               {lang === 'ar' 
-                ? "أنشئ متجرك الإلكتروني" 
-                : "Create Your Online Store"}
+                ? "أنشئ متجرك الإلكتروني بسهولة" 
+                : "Create Your Online Store Easily"}
             </span>
             <span className="text-2xl md:text-3xl text-gray-600 font-normal mt-4 block">
               {lang === 'ar' 
-                ? "ابدأ البيع عبر الإنترنت في دقائق" 
+                ? "ابدأ البيع عبر الإنترنت في دقائق معدودة" 
                 : "Start Selling Online in Minutes"}
             </span>
-          </h1>
+          </motion.h1>
           
           {/* Description */}
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: "400ms" }}>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="text-xl text-gray-600 max-w-2xl mx-auto"
+          >
             {lang === 'ar' 
-              ? "منصة متكاملة لإنشاء وإدارة متجرك الإلكتروني بسهولة وأمان، مع دعم فني على مدار الساعة"
-              : "A complete platform to create and manage your online store easily and securely, with 24/7 technical support"
+              ? "منصة متكاملة لإنشاء وإدارة متجرك الإلكتروني بسهولة وأمان، مع حلول دفع متعددة ودعم فني على مدار الساعة"
+              : "A complete platform to create and manage your online store easily and securely, with multiple payment solutions and 24/7 technical support"
             }
-          </p>
+          </motion.p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4 animate-fade-in" style={{ animationDelay: "600ms" }}>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className="flex flex-col sm:flex-row justify-center gap-4 pt-4"
+          >
             <Link to="/register">
               <Button 
                 size="lg" 
-                className="bg-green-600 hover:bg-green-700 text-lg transform transition-all duration-300 hover:scale-105 hover:shadow-lg w-full sm:w-auto"
+                className="bg-green-600 hover:bg-green-700 text-lg transform transition-all duration-300 hover:scale-105 hover:shadow-lg w-full sm:w-auto group"
               >
                 {lang === 'ar' ? "ابدأ الآن مجاناً" : "Start Now for Free"}
-                <Arrow className="mr-2 h-5 w-5" />
+                <Arrow className="mr-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
             <Button 
@@ -95,15 +116,17 @@ export const Hero = () => {
             >
               {lang === 'ar' ? "تواصل معنا" : "Contact Us"}
             </Button>
-          </div>
+          </motion.div>
 
           {/* Features Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
             {features.map((feature, index) => (
-              <div 
+              <motion.div 
                 key={index}
-                className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-                style={{ animationDelay: `${(index + 4) * 200}ms` }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.8 + index * 0.2 }}
+                className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100"
               >
                 <div className="flex flex-col items-center text-center space-y-4">
                   <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
@@ -116,7 +139,7 @@ export const Hero = () => {
                     {lang === 'ar' ? feature.descriptionAr : feature.descriptionEn}
                   </p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
