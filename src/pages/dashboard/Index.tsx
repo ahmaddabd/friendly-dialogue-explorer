@@ -1,150 +1,112 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/components/auth/AuthProvider";
-import { MainLayout } from "@/layouts/MainLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DashboardLayout } from "@/layouts/DashboardLayout";
 import { useLanguage } from "@/components/LanguageSwitcher";
-import { Store, Package, ShoppingCart, Users, TrendingUp, DollarSign, BarChart2 } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Overview } from "@/components/dashboard/Overview";
+import { RecentSales } from "@/components/dashboard/RecentSales";
+import { 
+  DollarSign, 
+  Users, 
+  CreditCard, 
+  Activity,
+  Package,
+  ShoppingCart,
+  TrendingUp,
+  ArrowUpRight,
+  ArrowDownRight
+} from "lucide-react";
 
 const Dashboard = () => {
-  const { user, loading } = useAuth();
-  const navigate = useNavigate();
   const { lang } = useLanguage();
-
-  // Fetch store data
-  const { data: stores } = useQuery({
-    queryKey: ["stores", user?.id],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("stores")
-        .select("id, name")
-        .eq("owner_id", user?.id);
-
-      if (error) throw error;
-      return data;
-    },
-    enabled: !!user?.id,
-  });
-
-  // Fetch orders data for KPIs
-  const { data: kpiData, isLoading: loadingKPIs } = useQuery({
-    queryKey: ["orders-kpi", stores?.map(store => store.id)],
-    queryFn: async () => {
-      if (!stores?.length) return null;
-
-      const { data: orders, error } = await supabase
-        .from("orders")
-        .select("total, created_at, status")
-        .in("store_id", stores.map(store => store.id))
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-
-      // Calculate KPIs
-      const totalSales = orders?.reduce((sum, order) => sum + Number(order.total), 0) || 0;
-      const totalOrders = orders?.length || 0;
-      const averageOrderValue = totalOrders > 0 ? totalSales / totalOrders : 0;
-
-      // Calculate growth (comparing current month with previous month)
-      const now = new Date();
-      const currentMonth = orders?.filter(order => {
-        const orderDate = new Date(order.created_at);
-        return orderDate.getMonth() === now.getMonth();
-      });
-      const previousMonth = orders?.filter(order => {
-        const orderDate = new Date(order.created_at);
-        return orderDate.getMonth() === now.getMonth() - 1;
-      });
-
-      const currentMonthSales = currentMonth?.reduce((sum, order) => sum + Number(order.total), 0) || 0;
-      const previousMonthSales = previousMonth?.reduce((sum, order) => sum + Number(order.total), 0) || 0;
-      
-      const growthRate = previousMonthSales > 0 
-        ? ((currentMonthSales - previousMonthSales) / previousMonthSales) * 100 
-        : 0;
-
-      return {
-        totalSales,
-        totalOrders,
-        averageOrderValue,
-        growthRate
-      };
-    },
-    enabled: !!stores?.length,
-  });
-
-  useEffect(() => {
-    if (!loading && !user) {
-      navigate('/login');
-    }
-  }, [user, loading, navigate]);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   const stats = [
     {
-      title: lang === 'ar' ? "إجمالي المبيعات" : "Total Sales",
-      value: loadingKPIs 
-        ? <Skeleton className="h-7 w-24" /> 
-        : `${kpiData?.totalSales?.toFixed(2) || 0} ${lang === 'ar' ? 'ريال' : 'SAR'}`,
+      title: lang === 'ar' ? "إجمالي الإيرادات" : "Total Revenue",
+      value: "$45,231.89",
+      description: lang === 'ar' ? "↗︎ 20.1% من الشهر الماضي" : "↗︎ 20.1% from last month",
       icon: DollarSign,
-      color: "text-green-600",
+      trend: "up",
     },
     {
-      title: lang === 'ar' ? "عدد الطلبات" : "Total Orders",
-      value: loadingKPIs 
-        ? <Skeleton className="h-7 w-16" /> 
-        : kpiData?.totalOrders || 0,
-      icon: ShoppingCart,
-      color: "text-blue-600",
+      title: lang === 'ar' ? "المبيعات" : "Sales",
+      value: "+2350",
+      description: lang === 'ar' ? "↘︎ 4% من الشهر الماضي" : "↘︎ 4% from last month",
+      icon: CreditCard,
+      trend: "down",
     },
     {
-      title: lang === 'ar' ? "متوسط قيمة الطلب" : "Average Order Value",
-      value: loadingKPIs 
-        ? <Skeleton className="h-7 w-24" /> 
-        : `${kpiData?.averageOrderValue?.toFixed(2) || 0} ${lang === 'ar' ? 'ريال' : 'SAR'}`,
-      icon: BarChart2,
-      color: "text-purple-600",
+      title: lang === 'ar' ? "العملاء النشطون" : "Active Users",
+      value: "+12,234",
+      description: lang === 'ar' ? "↗︎ 11% من الشهر الماضي" : "↗︎ 11% from last month",
+      icon: Users,
+      trend: "up",
     },
     {
-      title: lang === 'ar' ? "نسبة النمو الشهري" : "Monthly Growth",
-      value: loadingKPIs 
-        ? <Skeleton className="h-7 w-16" /> 
-        : `${kpiData?.growthRate?.toFixed(1) || 0}%`,
-      icon: TrendingUp,
-      color: kpiData?.growthRate >= 0 ? "text-green-600" : "text-red-600",
+      title: lang === 'ar' ? "معدل النشاط" : "Activity Rate",
+      value: "573",
+      description: lang === 'ar' ? "↗︎ 7% من الشهر الماضي" : "↗︎ 7% from last month",
+      icon: Activity,
+      trend: "up",
     },
   ];
 
   return (
-    <MainLayout>
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8">
-          {lang === 'ar' ? "لوحة التحكم" : "Dashboard"}
-        </h1>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <DashboardLayout>
+      <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
+        <div className="flex items-center justify-between space-y-2">
+          <h2 className="text-3xl font-bold tracking-tight">
+            {lang === 'ar' ? "لوحة التحكم" : "Dashboard"}
+          </h2>
+          <div className="flex items-center space-x-2">
+            <Button>
+              {lang === 'ar' ? "تحميل التقرير" : "Download Report"}
+            </Button>
+          </div>
+        </div>
+        
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow duration-200">
+            <Card key={index}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
                   {stat.title}
                 </CardTitle>
-                <stat.icon className={`h-4 w-4 ${stat.color}`} />
+                <stat.icon className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stat.value}</div>
+                <p className={`text-xs ${stat.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+                  {stat.description}
+                </p>
               </CardContent>
             </Card>
           ))}
         </div>
+
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+          <Card className="col-span-4">
+            <CardHeader>
+              <CardTitle>
+                {lang === 'ar' ? "نظرة عامة" : "Overview"}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pl-2">
+              <Overview />
+            </CardContent>
+          </Card>
+          <Card className="col-span-3">
+            <CardHeader>
+              <CardTitle>
+                {lang === 'ar' ? "آخر المبيعات" : "Recent Sales"}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <RecentSales />
+            </CardContent>
+          </Card>
+        </div>
       </div>
-    </MainLayout>
+    </DashboardLayout>
   );
 };
 
