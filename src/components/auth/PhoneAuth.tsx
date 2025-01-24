@@ -3,11 +3,12 @@ import { useLanguage } from "@/components/LanguageSwitcher";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
-import { Phone } from "lucide-react";
+import { Phone, ArrowLeft, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { supabase } from "@/integrations/supabase/client";
 import { isValidPhone } from "@/lib/utils/validation";
+import { Progress } from "@/components/ui/progress";
 
 export const PhoneAuth = () => {
   const { lang } = useLanguage();
@@ -15,6 +16,8 @@ export const PhoneAuth = () => {
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const Arrow = lang === 'ar' ? ArrowLeft : ArrowRight;
 
   const handleSendOTP = async () => {
     if (!isValidPhone(phone)) {
@@ -37,6 +40,7 @@ export const PhoneAuth = () => {
       if (error) throw error;
 
       setOtpSent(true);
+      setProgress(50);
       toast({
         title: lang === 'ar' ? "تم إرسال رمز التحقق" : "OTP Sent",
         description: lang === 'ar' 
@@ -76,6 +80,7 @@ export const PhoneAuth = () => {
 
       if (error) throw error;
 
+      setProgress(100);
       toast({
         title: lang === 'ar' ? "تم التحقق بنجاح" : "Verification Successful",
         description: lang === 'ar' 
@@ -93,9 +98,36 @@ export const PhoneAuth = () => {
     }
   };
 
+  const handleResendOTP = async () => {
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        phone,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: lang === 'ar' ? "تم إعادة إرسال الرمز" : "Code Resent",
+        description: lang === 'ar' 
+          ? "تم إعادة إرسال رمز التحقق إلى هاتفك" 
+          : "A new verification code has been sent to your phone",
+      });
+    } catch (error: any) {
+      toast({
+        title: lang === 'ar' ? "خطأ" : "Error",
+        description: error.message,
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
+        <Progress value={progress} className="mb-4" />
         <CardTitle>
           {lang === 'ar' ? "التحقق من رقم الهاتف" : "Phone Verification"}
         </CardTitle>
@@ -124,22 +156,32 @@ export const PhoneAuth = () => {
             />
           </div>
         ) : (
-          <InputOTP
-            value={otp}
-            onChange={(value) => setOtp(value)}
-            maxLength={6}
-          >
-            <InputOTPGroup>
-              {Array.from({ length: 6 }).map((_, i) => (
-                <InputOTPSlot key={i} index={i} />
-              ))}
-            </InputOTPGroup>
-          </InputOTP>
+          <div className="space-y-4">
+            <InputOTP
+              value={otp}
+              onChange={(value) => setOtp(value)}
+              maxLength={6}
+            >
+              <InputOTPGroup>
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <InputOTPSlot key={i} index={i} />
+                ))}
+              </InputOTPGroup>
+            </InputOTP>
+            <Button
+              variant="ghost"
+              className="w-full text-sm hover:text-green-600"
+              onClick={handleResendOTP}
+              disabled={loading}
+            >
+              {lang === 'ar' ? "إعادة إرسال الرمز" : "Resend Code"}
+            </Button>
+          </div>
         )}
       </CardContent>
       <CardFooter>
         <Button
-          className="w-full bg-green-600 hover:bg-green-700"
+          className="w-full bg-green-600 hover:bg-green-700 gap-2"
           onClick={otpSent ? handleVerifyOTP : handleSendOTP}
           disabled={loading}
         >
@@ -150,6 +192,7 @@ export const PhoneAuth = () => {
                 : (lang === 'ar' ? "إرسال رمز التحقق" : "Send Code")
               )
           }
+          <Arrow className="h-4 w-4" />
         </Button>
       </CardFooter>
     </Card>
