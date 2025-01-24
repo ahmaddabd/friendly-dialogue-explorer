@@ -7,27 +7,59 @@ import { RegistrationSteps } from "./RegistrationSteps";
 import { useAuthStep } from "../hooks/useAuthStep";
 import { useStoreStep } from "../hooks/useStoreStep";
 import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 export const RegistrationCard = () => {
   const { lang } = useLanguage();
+  const { toast } = useToast();
   const { handleEmailStep, loading: emailLoading } = useAuthStep();
   const { handleStoreStep, loading: storeLoading } = useStoreStep();
   const [step, setStep] = useState<1 | 2>(1);
   const [formData, setFormData] = useState<any>(null);
 
   const handleEmailSubmit = async (data: any) => {
-    const result = await handleEmailStep(data);
-    if (result) {
-      setFormData(result);
-      setStep(2);
+    try {
+      const result = await handleEmailStep(data);
+      if (result) {
+        setFormData(result);
+        setStep(2);
+        toast({
+          title: lang === 'ar' ? "تم التحقق بنجاح" : "Verification successful",
+          description: lang === 'ar' ? "يرجى إكمال معلومات المتجر" : "Please complete store information",
+        });
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: lang === 'ar' ? "حدث خطأ" : "Error occurred",
+        description: (error as Error).message,
+      });
     }
   };
 
   const handleStoreSubmit = async (data: any) => {
-    await handleStoreStep(data, formData);
+    try {
+      await handleStoreStep(data, formData);
+      toast({
+        title: lang === 'ar' ? "تم إنشاء المتجر بنجاح" : "Store created successfully",
+        description: lang === 'ar' ? "سيتم تحويلك إلى لوحة التحكم" : "You will be redirected to dashboard",
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: lang === 'ar' ? "حدث خطأ" : "Error occurred",
+        description: (error as Error).message,
+      });
+    }
   };
 
-  const handleBack = () => setStep(1);
+  const handleBack = () => {
+    setStep(1);
+    toast({
+      title: lang === 'ar' ? "تم الرجوع" : "Went back",
+      description: lang === 'ar' ? "يمكنك تعديل معلومات الحساب" : "You can modify account information",
+    });
+  };
 
   return (
     <Card className="w-full max-w-md shadow-xl border border-green-100/20">

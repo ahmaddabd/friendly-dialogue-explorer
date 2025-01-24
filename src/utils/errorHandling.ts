@@ -1,53 +1,33 @@
-import { toast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { useLanguage } from "@/hooks/useLanguage";
 
-export const handleError = (error: any) => {
+export const useErrorHandler = () => {
+  const { toast } = useToast();
   const { lang } = useLanguage();
+
+  const handleError = (error: unknown) => {
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+    
+    toast({
+      variant: "destructive",
+      title: lang === 'ar' ? "حدث خطأ" : "Error occurred",
+      description: errorMessage,
+    });
+
+    console.error("Error details:", error);
+  };
+
+  return { handleError };
+};
+
+export const formatErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    return error.message;
+  }
   
-  console.error('Error:', error);
-
-  // Handle Supabase errors
-  if (error?.code === 'PGRST301') {
-    toast({
-      title: lang === 'ar' ? "خطأ في الصلاحيات" : "Permission Error",
-      description: lang === 'ar' 
-        ? "ليس لديك صلاحية للقيام بهذا الإجراء" 
-        : "You don't have permission to perform this action",
-      variant: "destructive"
-    });
-    return;
+  if (typeof error === 'string') {
+    return error;
   }
-
-  // Handle network errors
-  if (error?.message === 'Failed to fetch') {
-    toast({
-      title: lang === 'ar' ? "خطأ في الاتصال" : "Network Error",
-      description: lang === 'ar'
-        ? "يرجى التحقق من اتصالك بالإنترنت"
-        : "Please check your internet connection",
-      variant: "destructive"
-    });
-    return;
-  }
-
-  // Handle validation errors
-  if (error?.validation) {
-    toast({
-      title: lang === 'ar' ? "خطأ في البيانات" : "Validation Error",
-      description: error.message,
-      variant: "destructive"
-    });
-    return;
-  }
-
-  // Default error message
-  toast({
-    title: lang === 'ar' ? "خطأ" : "Error",
-    description: error?.message || (
-      lang === 'ar' 
-        ? "حدث خطأ غير متوقع"
-        : "An unexpected error occurred"
-    ),
-    variant: "destructive"
-  });
+  
+  return 'An unknown error occurred';
 };
