@@ -62,54 +62,63 @@ export const RegistrationCard = () => {
   };
 
   return (
-    <Card className="w-full max-w-md shadow-xl border border-green-100/20">
-      <CardHeader className="space-y-2 text-center pb-6">
-        <Link 
-          to="/" 
-          className="text-green-600 hover:text-green-700 transition-colors text-xl font-bold mb-6 inline-block"
-        >
-          {lang === 'ar' ? "دكان تك" : "Dukan Tech"}
-        </Link>
-        
-        <RegistrationSteps currentStep={step} />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-green-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Decorative Elements */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute top-0 -left-4 w-72 h-72 bg-green-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob" />
+        <div className="absolute top-0 -right-4 w-72 h-72 bg-green-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000" />
+        <div className="absolute -bottom-8 left-20 w-72 h-72 bg-green-100 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000" />
+      </div>
 
-        <CardTitle className="text-2xl font-bold text-gray-800">
-          {step === 1 
-            ? (lang === 'ar' ? "إنشاء حساب جديد" : "Create New Account")
-            : (lang === 'ar' ? "معلومات المتجر" : "Store Information")
-          }
-        </CardTitle>
-        <CardDescription className="text-gray-600">
-          {step === 1
-            ? (lang === 'ar' ? "قم بإدخال معلومات حسابك" : "Enter your account information")
-            : (lang === 'ar' ? "قم بإدخال معلومات متجرك" : "Enter your store information")
-          }
-        </CardDescription>
-      </CardHeader>
-
-      <CardContent className="p-6">
-        {step === 1 ? (
-          <EmailForm onSubmit={handleEmailSubmit} loading={emailLoading} />
-        ) : (
-          <StoreForm 
-            onSubmit={handleStoreSubmit} 
-            onBack={handleBack}
-            loading={storeLoading}
-          />
-        )}
-      </CardContent>
-
-      <CardFooter className="flex flex-col space-y-4 p-6 bg-gray-50/50">
-        <p className="text-center text-sm text-gray-600">
-          {lang === 'ar' ? "لديك حساب بالفعل؟" : "Already have an account?"}{" "}
-          <Link
-            to="/login"
-            className="font-medium text-green-600 hover:text-green-500"
+      <Card className="w-full max-w-md shadow-xl border border-green-100/20 backdrop-blur-sm bg-white/80 animate-fade-in">
+        <CardHeader className="space-y-2 text-center pb-6">
+          <Link 
+            to="/" 
+            className="text-green-600 hover:text-green-700 transition-colors text-xl font-bold mb-6 inline-block"
           >
-            {lang === 'ar' ? "سجل دخول" : "Sign in"}
+            {lang === 'ar' ? "دكان تك" : "Dukan Tech"}
           </Link>
-        </p>
-      </CardFooter>
-    </Card>
+          
+          <RegistrationSteps currentStep={step} />
+
+          <CardTitle className="text-2xl font-bold text-gray-800">
+            {step === 1 
+              ? (lang === 'ar' ? "إنشاء حساب جديد" : "Create New Account")
+              : (lang === 'ar' ? "معلومات المتجر" : "Store Information")
+            }
+          </CardTitle>
+          <CardDescription className="text-gray-600">
+            {step === 1
+              ? (lang === 'ar' ? "قم بإدخال معلومات حسابك" : "Enter your account information")
+              : (lang === 'ar' ? "قم بإدخال معلومات متجرك" : "Enter your store information")
+            }
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent className="p-6">
+          {step === 1 ? (
+            <EmailForm onSubmit={handleEmailSubmit} loading={emailLoading} />
+          ) : (
+            <StoreForm 
+              onSubmit={handleStoreSubmit} 
+              onBack={handleBack}
+              loading={storeLoading}
+            />
+          )}
+        </CardContent>
+
+        <CardFooter className="flex flex-col space-y-4 p-6 bg-gray-50/50">
+          <p className="text-center text-sm text-gray-600">
+            {lang === 'ar' ? "لديك حساب بالفعل؟" : "Already have an account?"}{" "}
+            <Link
+              to="/login"
+              className="font-medium text-green-600 hover:text-green-500"
+            >
+              {lang === 'ar' ? "سجل دخول" : "Sign in"}
+            </Link>
+          </p>
+        </CardFooter>
+      </Card>
+    </div>
   );
 };

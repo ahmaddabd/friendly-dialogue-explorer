@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
-import { ArrowLeft, ArrowRight, Mail, Lock } from "lucide-react";
+import { ArrowLeft, ArrowRight, Mail, Lock, LogIn } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -133,14 +133,14 @@ const Login = () => {
           <CardFooter className="flex flex-col space-y-4">
             <Button
               type="submit"
-              className="w-full bg-green-600 hover:bg-green-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="w-full bg-green-600 hover:bg-green-700 transition-all duration-300 shadow-lg hover:shadow-xl gap-2"
               disabled={loading}
             >
               {loading 
                 ? (lang === 'ar' ? "جاري تسجيل الدخول..." : "Signing in...")
                 : (lang === 'ar' ? "تسجيل الدخول" : "Sign in")
               }
-              <Arrow className="ml-2 h-5 w-5" />
+              <LogIn className="h-4 w-4" />
             </Button>
             <p className="text-center text-sm text-gray-600">
               {lang === 'ar' ? "ليس لديك حساب؟" : "Don't have an account?"}{" "}
