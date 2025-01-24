@@ -29,7 +29,25 @@ export const useStoreStep = () => {
       });
 
       if (signUpError) {
-        handleSignUpError(signUpError);
+        // Check specifically for user_already_exists error
+        if (signUpError.message.includes("User already registered") || 
+            signUpError?.message.includes("user_already_exists")) {
+          toast({
+            title: lang === 'ar' ? "البريد الإلكتروني مسجل مسبقاً" : "Email Already Registered",
+            description: lang === 'ar' 
+              ? "هذا البريد الإلكتروني مسجل بالفعل. الرجاء تسجيل الدخول أو استخدام بريد إلكتروني آخر"
+              : "This email is already registered. Please sign in or use a different email",
+            variant: "destructive"
+          });
+          return false;
+        }
+
+        // Handle other signup errors
+        toast({
+          title: lang === 'ar' ? "خطأ في التسجيل" : "Registration Error",
+          description: signUpError.message,
+          variant: "destructive"
+        });
         return false;
       }
 
@@ -61,25 +79,6 @@ export const useStoreStep = () => {
       return false;
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleSignUpError = (error: any) => {
-    if (error.message.includes("User already registered") || 
-        (error as any)?.body?.includes("user_already_exists")) {
-      toast({
-        title: lang === 'ar' ? "البريد الإلكتروني مسجل مسبقاً" : "Email Already Registered",
-        description: lang === 'ar' 
-          ? "هذا البريد الإلكتروني مسجل بالفعل. الرجاء تسجيل الدخول أو استخدام بريد إلكتروني آخر"
-          : "This email is already registered. Please sign in or use a different email",
-        variant: "destructive"
-      });
-    } else {
-      toast({
-        title: lang === 'ar' ? "خطأ في التسجيل" : "Registration Error",
-        description: error.message,
-        variant: "destructive"
-      });
     }
   };
 
