@@ -14,32 +14,40 @@ import { motion } from "framer-motion";
 const Index = () => {
   return (
     <MainLayout>
-      <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50/50 animate-gradient-x relative overflow-hidden">
-        {/* Background decorative elements */}
+      <div className="min-h-screen bg-gradient-to-br from-green-50/80 via-white to-green-50/80 animate-gradient-x relative overflow-hidden">
+        {/* Decorative arabesque patterns */}
         <div className="absolute inset-0 -z-10">
+          <div className="absolute top-0 left-0 w-64 h-64 bg-[url('/arabesque-pattern.svg')] opacity-5 transform -rotate-45" />
+          <div className="absolute bottom-0 right-0 w-64 h-64 bg-[url('/arabesque-pattern.svg')] opacity-5 transform rotate-135" />
           <motion.div 
             animate={{ 
               scale: [1, 1.1, 1],
-              opacity: [0.2, 0.3, 0.2]
+              opacity: [0.1, 0.2, 0.1]
             }}
             transition={{
               duration: 5,
               repeat: Infinity,
               repeatType: "reverse"
             }}
-            className="absolute top-0 -left-4 w-72 h-72 bg-green-200 rounded-full mix-blend-multiply filter blur-xl"
+            className="absolute top-0 -left-4 w-72 h-72 bg-green-200/50 rounded-full mix-blend-multiply filter blur-xl"
+            style={{
+              backgroundImage: "radial-gradient(circle at center, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1))"
+            }}
           />
           <motion.div 
             animate={{ 
               scale: [1, 1.2, 1],
-              opacity: [0.2, 0.4, 0.2]
+              opacity: [0.1, 0.3, 0.1]
             }}
             transition={{
               duration: 7,
               repeat: Infinity,
               repeatType: "reverse"
             }}
-            className="absolute top-0 -right-4 w-72 h-72 bg-green-300 rounded-full mix-blend-multiply filter blur-xl"
+            className="absolute top-0 -right-4 w-72 h-72 bg-green-300/50 rounded-full mix-blend-multiply filter blur-xl"
+            style={{
+              backgroundImage: "radial-gradient(circle at center, rgba(34, 197, 94, 0.3), rgba(34, 197, 94, 0.1))"
+            }}
           />
         </div>
 

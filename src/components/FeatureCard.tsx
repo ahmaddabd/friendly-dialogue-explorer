@@ -27,26 +27,32 @@ export const FeatureCard = ({
   const { lang } = useLanguage();
 
   return (
-    <Card className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden bg-white/80 backdrop-blur-sm border-green-100/20">
+    <Card className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden bg-white/90 backdrop-blur-sm border-green-100/20">
       <div className="p-6 relative">
-        {/* Decorative background circle */}
-        <div className="absolute top-0 right-0 w-24 h-24 bg-green-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-500" />
+        {/* Decorative background with Shami-inspired pattern */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-green-50 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-150 duration-500">
+          <div className="absolute inset-0 bg-[url('/arabesque-pattern.svg')] opacity-10" />
+        </div>
         
         <div className="relative">
-          {/* Icon */}
-          <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-6 transform transition-transform group-hover:scale-110 duration-300">
-            <IconComponent className="w-7 h-7 text-green-600" />
+          {/* Icon with basket-inspired container */}
+          <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-50 rounded-2xl flex items-center justify-center mb-6 transform transition-transform group-hover:scale-110 duration-300 shadow-inner">
+            <IconComponent className="w-8 h-8 text-green-600" />
           </div>
           
-          {/* Title */}
-          <h3 className="text-xl font-bold text-gray-900 mb-3">
+          {/* Title with decorative underline */}
+          <h3 className="text-xl font-bold text-gray-900 mb-3 relative inline-block">
             {lang === 'ar' ? titleAr : titleEn}
+            <div className="absolute bottom-0 left-0 w-1/3 h-0.5 bg-green-200 rounded-full transform origin-left transition-transform group-hover:scale-x-150" />
           </h3>
           
           {/* Description */}
           <p className="text-gray-600 leading-relaxed">
             {lang === 'ar' ? descriptionAr : descriptionEn}
           </p>
+
+          {/* Decorative corner accent */}
+          <div className="absolute bottom-0 right-0 w-12 h-12 opacity-10 transform rotate-45 translate-x-6 translate-y-6 bg-[url('/corner-pattern.svg')]" />
         </div>
       </div>
     </Card>
