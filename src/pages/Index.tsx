@@ -3,6 +3,7 @@ import { Hero } from "@/components/sections/Hero";
 import { Stats } from "@/components/sections/Stats";
 import { Features } from "@/components/sections/Features";
 import { FeaturedStores } from "@/components/sections/FeaturedStores";
+import { LatestStores } from "@/components/sections/LatestStores";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { FAQ } from "@/components/sections/FAQ";
 import { CTA } from "@/components/sections/CTA";
@@ -89,6 +90,20 @@ const Index = () => {
             }
           >
             <FeaturedStores />
+          </Suspense>
+
+          <Suspense 
+            fallback={
+              <div className="py-20 px-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                  {[1, 2, 3].map((i) => (
+                    <Skeleton key={i} className="h-64 rounded-xl animate-pulse bg-green-100/20" />
+                  ))}
+                </div>
+              </div>
+            }
+          >
+            <LatestStores />
           </Suspense>
 
           <Suspense 
