@@ -1,6 +1,7 @@
 import { content } from "@/config/content";
 import { useLanguage } from "@/components/LanguageSwitcher";
 import { Users, ShoppingBag, Clock } from "lucide-react";
+import { motion } from "framer-motion";
 
 export const Stats = () => {
   const { lang } = useLanguage();
@@ -35,7 +36,13 @@ export const Stats = () => {
   return (
     <section className="py-20 bg-gradient-to-br from-white via-green-50/30 to-white">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
             {lang === 'ar' ? "إحصائيات مميزة" : "Key Statistics"}
           </h2>
@@ -45,11 +52,15 @@ export const Stats = () => {
               : "We are proud to serve thousands of customers and always strive for growth and development"
             }
           </p>
-        </div>
+        </motion.div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {stats.map((stat, index) => (
-            <div 
+            <motion.div 
               key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.2 }}
+              viewport={{ once: true }}
               className={`group relative overflow-hidden rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 ${stat.bgColor}`}
             >
               <div className="absolute top-0 left-0 w-full h-full bg-white/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -67,7 +78,7 @@ export const Stats = () => {
                   {lang === 'ar' ? stat.labelAr : stat.labelEn}
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
