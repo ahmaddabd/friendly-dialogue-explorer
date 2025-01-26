@@ -33,15 +33,13 @@ export const Hero = () => {
   ];
 
   return (
-    <section className="pt-32 pb-20 relative overflow-hidden bg-gradient-to-br from-amber-50 via-white to-amber-50">
-      {/* Enhanced Shami-inspired decorative background */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[url('/arabesque-pattern.svg')] opacity-5 animate-pulse-slow" />
-        <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-amber-100/30 to-transparent" />
-        <div className="absolute bottom-0 right-0 w-full h-64 bg-gradient-to-t from-amber-100/30 to-transparent" />
+    <section className="min-h-screen pt-32 pb-20 relative overflow-hidden">
+      {/* Enhanced Syrian-inspired decorative background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-white to-amber-50">
+        <div className="absolute inset-0 bg-[url('/arabesque-pattern.svg')] opacity-5" />
         
         {/* Animated geometric patterns */}
-        {[...Array(3)].map((_, i) => (
+        {[...Array(5)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-30"
@@ -49,7 +47,9 @@ export const Hero = () => {
               background: `radial-gradient(circle at center, ${
                 i === 0 ? 'rgba(251, 191, 36, 0.4)' :
                 i === 1 ? 'rgba(217, 119, 6, 0.3)' :
-                'rgba(180, 83, 9, 0.2)'
+                i === 2 ? 'rgba(180, 83, 9, 0.2)' :
+                i === 3 ? 'rgba(146, 64, 14, 0.2)' :
+                'rgba(120, 53, 15, 0.1)'
               }, transparent)`,
               top: `${Math.random() * 100}%`,
               left: `${Math.random() * 100}%`,
@@ -91,19 +91,12 @@ export const Hero = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="relative"
           >
-            <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-48 h-12 bg-[url('/arabesque-border.svg')] opacity-20 animate-pulse-slow" />
+            <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-48 h-12 bg-[url('/arabesque-border.svg')] opacity-20 animate-pulse" />
             <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-              <span className="block mb-6 bg-clip-text text-transparent bg-gradient-to-r from-amber-700 via-amber-800 to-amber-900 relative">
+              <span className="block mb-6 bg-clip-text text-transparent bg-gradient-to-r from-amber-700 via-amber-800 to-amber-900">
                 {lang === 'ar' 
                   ? "أنشئ متجرك الإلكتروني" 
                   : "Create Your Online Store"}
-                <motion.div
-                  className="absolute -right-8 -top-8 w-16 h-16 text-amber-500 opacity-50"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                >
-                  <Star className="w-full h-full" />
-                </motion.div>
               </span>
               <span className="text-2xl md:text-3xl text-amber-800/80 font-normal mt-6 block">
                 {lang === 'ar' 
@@ -111,34 +104,13 @@ export const Hero = () => {
                   : "Start Selling Online in Minutes"}
               </span>
             </h1>
-            <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-48 h-12 bg-[url('/arabesque-border.svg')] opacity-20 animate-pulse-slow transform rotate-180" />
           </motion.div>
-          
-          {/* Enhanced description with basket-inspired background */}
+
+          {/* Enhanced CTA Buttons with Syrian-inspired design */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="relative"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-amber-100/50 via-amber-50/30 to-amber-100/50 rounded-3xl transform rotate-1" />
-            <div className="absolute inset-0 bg-gradient-to-r from-amber-100/50 via-amber-50/30 to-amber-100/50 rounded-3xl transform -rotate-1" />
-            <p className="text-xl text-amber-900/80 max-w-2xl mx-auto p-8 rounded-3xl bg-white/80 backdrop-blur-sm border border-amber-200/30 shadow-xl relative z-10">
-              <div className="absolute inset-0 bg-[url('/basket-texture.svg')] opacity-5" />
-              <span className="relative">
-                {lang === 'ar' 
-                  ? "منصة متكاملة لإنشاء وإدارة متجرك الإلكتروني بسهولة وأمان، مع حلول دفع متعددة ودعم فني على مدار الساعة"
-                  : "A complete platform to create and manage your online store easily and securely, with multiple payment solutions and 24/7 technical support"
-                }
-              </span>
-            </p>
-          </motion.div>
-
-          {/* Enhanced CTA Buttons with Shami-inspired design */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
             className="flex flex-col sm:flex-row justify-center gap-6 pt-8"
           >
             <Link to="/register">
@@ -164,16 +136,6 @@ export const Hero = () => {
                 </span>
               </Button>
             </Link>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="text-lg px-8 py-6 border-2 border-amber-300 hover:border-amber-600 hover:text-amber-700 transition-all duration-300 w-full sm:w-auto bg-white/90 backdrop-blur-sm rounded-2xl hover:shadow-lg"
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              <span className="text-xl">
-                {lang === 'ar' ? "تواصل معنا" : "Contact Us"}
-              </span>
-            </Button>
           </motion.div>
 
           {/* Enhanced Features Grid with basket-inspired cards */}
@@ -183,7 +145,7 @@ export const Hero = () => {
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.8 + index * 0.2 }}
+                transition={{ duration: 0.5, delay: 0.6 + index * 0.2 }}
                 className="relative group"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-amber-100/50 to-amber-50/50 rounded-3xl transform transition-transform group-hover:scale-105 duration-300" />
@@ -195,7 +157,7 @@ export const Hero = () => {
                     <h3 className="text-2xl font-semibold text-amber-900">
                       {lang === 'ar' ? feature.titleAr : feature.titleEn}
                     </h3>
-                    <p className="text-amber-800/80 text-lg">
+                    <p className="text-amber-800/80">
                       {lang === 'ar' ? feature.descriptionAr : feature.descriptionEn}
                     </p>
                   </div>
