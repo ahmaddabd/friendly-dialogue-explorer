@@ -33,9 +33,9 @@ export const Hero = () => {
   ];
 
   return (
-    <section className="min-h-screen pt-32 pb-20 relative overflow-hidden">
-      {/* Enhanced Syrian-inspired decorative background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-white to-amber-50">
+    <section className="min-h-screen pt-32 pb-20 relative overflow-hidden bg-gradient-to-br from-amber-50 via-white to-amber-50">
+      {/* Damascene-inspired decorative background */}
+      <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[url('/arabesque-pattern.svg')] opacity-5" />
         
         {/* Animated geometric patterns */}
